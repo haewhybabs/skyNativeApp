@@ -1,15 +1,10 @@
 import React,{Component} from 'react';
 
 import { createStackNavigator } from 'react-navigation-stack';
-
-
-import {Text,TouchableOpacity} from 'react-native';
-import{Title} from 'native-base';
-import { createAppContainer } from 'react-navigation';
-
-
+import { createAppContainer} from 'react-navigation';
 import Splash from './Splash';
 import Login from './Login';
+import Dashboard from './Dashboard';
 
 
 class Route extends Component{
@@ -20,7 +15,7 @@ class Route extends Component{
         this.state = {
             dataSource:[],
             isLoading:true,
-            timePassed:false
+           
         }
   
        
@@ -38,6 +33,7 @@ class Route extends Component{
 
 export default Route;
 
+
 const screens = {
 
     Splash: {
@@ -53,7 +49,7 @@ const screens = {
     
     Login:{
         screen:Login,
-        navigationOptions:({navigation}) => ({
+        navigationOptions:() => ({
             
             headerBackTitle:null,
             
@@ -62,8 +58,23 @@ const screens = {
             
         }),
     },
+
+    Dashboard:{
+        screen:Dashboard,
+        navigationOptions: () => ({
+            title: null,
+            headerBackTitle: null,
+            headerShown: false
+           
+        }),
+    },
+
+
     
 }
 const HomeStack =createStackNavigator(screens);
 
 const Navigator=createAppContainer(HomeStack);
+
+
+

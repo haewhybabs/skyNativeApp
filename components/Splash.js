@@ -58,21 +58,21 @@ class Splash extends Component{
 
         if (!this.state.timePassed) {
             return (  
-                <Container style={{backgroundColor:'#6610f2'}}>
+                <Container style={{backgroundColor:'#007bff'}}>
                     <Body>
                         <Image
                             source={require('../assets/img/splash.png')}
                             style={{width:170,height:170,marginTop:250}}
                         />
 
-                        <Title style={{color:'#f8f9fa', fontSize:30, fontWeight:'10%'}}>SKYLOAN</Title>
+                        <Text style={{color:'#f8f9fa', fontSize:30, fontWeight:'bold'}}>SKYLOAN</Text>
                     </Body>
                 
                 </Container>
             );
 
         } else {
-            return <Login/>;
+            return <Login navigation={this.props.navigation.navigate}/>;
         }
 
         
