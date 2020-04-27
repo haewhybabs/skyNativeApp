@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART } from '../redux/cart_action';
+import { ADD_TO_CART, REMOVE_FROM_CART } from '../redux/actions';
 const initial_state = [{
     id: 4,
     name: 'Amala',

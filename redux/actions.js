@@ -29,12 +29,12 @@ export function removeFromCartAction({ id }) {
     }
 }
 
-export function saveUserDetailsAction({ user_id, name, email, role_id, token }) {
+export function saveUserDetailsAction({ user_id, fullname, email, role_id, token }) {
     return {
         type: SAVE_USER_DETAILS,
         payload: {
             user_id,
-            name,
+            fullname,
             email,
             role_id,
             token

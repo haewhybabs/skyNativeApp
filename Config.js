@@ -1,4 +1,4 @@
-const token = "HdFDjada4da";
+const token = "H3adfadpf4adf";
 const apiUrl = "http://192.168.43.36:8000/api/";
 const vendorImage = "http://192.168.43.37:8000/vendorimages/";
 export {

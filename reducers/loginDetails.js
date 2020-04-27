@@ -1,4 +1,4 @@
-import { SAVE_USER_DETAILS } from '../redux/cart_action';
+import { SAVE_USER_DETAILS } from '../redux/actions';
 // const initial_state = {
 //     user_id: 9,
 //     name: "Ayobami Babalol",

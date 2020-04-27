@@ -48,11 +48,6 @@ class Splash extends Component{
 
     
     
-    
-    pressHandler =  () =>{
-        this.props.navigation.navigate('Category')
-    }
-
   
     render(){
 

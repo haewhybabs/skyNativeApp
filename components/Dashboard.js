@@ -20,8 +20,8 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {saveUserDetailsAction} from '../redux/cart_action';
-
+import {saveUserDetailsAction} from '../redux/actions';
+import FooterScreen from './Footer';
 class Dashboard extends Component{
     
     constructor(){
@@ -37,14 +37,8 @@ class Dashboard extends Component{
        
     }
 
-    async componentDidMount(){
-        await Font.loadAsync({
-        'Roboto': require('native-base/Fonts/Roboto.ttf'),
-        'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-        ...Ionicons.font,
-        })
-        this.setState({ loading: false })
-        console.log(this.props.navigation.navigate);
+    componentDidMount(){
+       
 
     }
 
@@ -60,32 +54,30 @@ class Dashboard extends Component{
             <Container>
                 <Content>
                 <ImageBackground source={require('../assets/img/bimage.jpg')} style={styles.image}>
-                        <Text style={{color:'#f8f9fa',alignSelf:'flex-end', marginRight:10,fontWeight:'bold',fontSize:25,marginTop:3}}>LOAN PLANS</Text>
-                        <Text style={{alignSelf:'flex-start', marginLeft:'3%', marginTop:30, color:'#f8f9fa'}}>GET A MAXI LOAN</Text>
+                        <Text style={{color:'#f8f9fa',alignSelf:'flex-end', marginRight:10,fontWeight:'bold',fontSize:20,marginTop:3}}>LOAN PLANS</Text>
+                        <Text style={{alignSelf:'flex-start', marginLeft:'3%', marginTop:30, color:'#f8f9fa'}}>Monthly Interest</Text>
                         <Grid>
-                            <Text style={{fontSize:33,marginTop:10,marginLeft:'3%', color:'#f8f9fa',fontWeight:'bold'}}>0.95%</Text>
-                            <Text style={{marginTop:30, marginLeft:10,color:'#f8f9fa'}}>Interest</Text>
-
+                            <Text style={{fontSize:25,marginTop:10,marginLeft:'3%', color:'#f8f9fa',fontWeight:'bold'}}>0.95%</Text>
                             <Col>
-                                <Button rounded info style={{alignSelf:'flex-end',marginTop:20,marginRight:10,width:60,height:30}}><Text style={{color:'#f8f9fa',width:'100%',textAlign:'center',fontWeight:'bold'}}>More</Text></Button>
+                                <Button rounded info style={{alignSelf:'flex-end',marginTop:20,marginRight:10,width:120,height:30,backgroundColor:'#00CCFF'}}><Text style={{color:'#f8f9fa',width:'100%',textAlign:'center',fontWeight:'bold'}}>Get Started</Text></Button>
                             </Col>
                         </Grid>                     
                     </ImageBackground>
 
-                    <View style={{marginTop:40,alignItems:'center'}}>
-                        <Text style={{color:'gray',fontSize:25,fontWeight:'bold'}}>All Loan Plans</Text>
+                    <View style={{marginTop:30,alignItems:'center'}}>
+                        <Text style={{color:'gray',fontSize:15,fontWeight:'bold'}}>All Loan Plans</Text>
                     </View>
 
                     
 
-                    <Grid style={{marginTop:50}}>
+                    <Grid style={{marginTop:30}}>
 
                         <Col>
 
                             <Card>
                                 <CardItem>
                                     <Icon active name="swap" style={{color:'#e83e8c'}}/>
-                                    <Text style={{fontWeight:'bold',fontSize:20}}>MINI</Text>
+                                    <Text style={{fontWeight:'bold'}}>MINI</Text>
                                     <Right>
                                         <Icon name="arrow-forward" />
                                     </Right>
@@ -100,7 +92,7 @@ class Dashboard extends Component{
                             <Card>
                                 <CardItem>
                                     <Icon active name="swap" style={{color:'#e83e8c'}}/>
-                                    <Text style={{fontWeight:'bold',fontSize:20}}>MIDI</Text>
+                                    <Text style={{fontWeight:'bold'}}>MIDI</Text>
                                     <Right>
                                         <Icon name="arrow-forward" />
                                     </Right>
@@ -117,7 +109,7 @@ class Dashboard extends Component{
                     <Card style={{alignItems:'center',marginTop:20}}>
                         <CardItem>
                             <Icon active name="md-share" style={{color:'#e83e8c'}}/>
-                            <Text style={{fontWeight:'bold',fontSize:20}}>MAXI</Text>
+                            <Text style={{fontWeight:'bold'}}>MAXI</Text>
                             <Right>
                                 <Icon name="arrow-forward" />
                             </Right>
@@ -125,29 +117,20 @@ class Dashboard extends Component{
                         <CardItem>
                             <Text style={{letterSpacing:2}}>₦15000-₦250000</Text>  
                         </CardItem>
-                    </Card>     
-                </Content>
+                    </Card> 
+                    
+                    
+                    <View style={{marginTop:25,alignItems:'center'}}>
+                        <Button block style={{alignSelf:'center', backgroundColor:'#00CCFF'}}>
+                            <Text style={{width:'100%',textAlign:'center', color:'#fff', fontWeight:'bold'}}>Make a Loan Request</Text>
+                            
+                        </Button>
+                    </View>
 
-                <Footer>
-                    <FooterTab>
-                        <Button vertical>
-                            <Icon name="apps" />
-                            <Text>Apps</Text>
-                        </Button>
-                        <Button vertical>
-                            <Icon name="camera" />
-                            <Text>Camera</Text>
-                        </Button>
-                        <Button vertical active>
-                            <Icon active name="navigate" />
-                            <Text>Navigate</Text>
-                        </Button>
-                        <Button vertical>
-                            <Icon name="person" />
-                            <Text>Contact</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer>
+                    
+                </Content>
+                <FooterScreen navigation={this.props.navigation}/>
+                
             </Container>
         )
 
