@@ -79,8 +79,8 @@ class Loans extends Component{
                                     selectedValue={this.state.loanPlanInput}
                                     onValueChange={this.onValueChange2.bind(this)}
                                     >
-                                    <Picker.Item label="MINI" value="22" />
-                                    <Picker.Item label="MIDI" value="22" />
+                                    <Picker.Item label="MINI" value="25" />
+                                    <Picker.Item label="MIDI" value="27" />
                                     <Picker.Item label="MAXI" value="22" />
                                 </Picker>
                             </Item>

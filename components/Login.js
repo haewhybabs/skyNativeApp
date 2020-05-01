@@ -55,13 +55,31 @@ class Login extends Component{
         this.setState({isLoading:false})
     }
 
+    
+
     registerHandler = () =>{
+
+        if(!this.props.route){
+            this.props.navigation.navigate('Register');
+        }
+
+        else{
+        
             
-        this.props.navigation.navigate('Register');
+            this.props.route('Register');
+        }
     }
 
     gotoDashboard = () =>{
-        this.props.navigation('Dashboard');
+        if(!this.props.route){
+            this.props.navigation.navigate('Dashboard');
+        }
+
+        else{
+        
+            
+            this.props.route('Dashboard');
+        }
     }
 
 
@@ -99,11 +117,7 @@ class Login extends Component{
                 })
                 .then(response => {
                     
-                    if (!response.ok) {                      
-                        throw new Error(                    
-                            "HTTP status " + response.status 
-                        );                                   
-                    }              
+                          
                                     
                     return response.json();      
                 })
@@ -128,12 +142,11 @@ class Login extends Component{
                             token:contents.token
 
                         });
-                        this.props.navigation('Dashboard');
-                        
+                        this.gotoDashboard()
                     }
                     else{
 
-                        
+                        this.hideLoader();
                         Toast.show({
                             text:'Invalid Email or Password',
                             buttonText:'Okay',
@@ -141,14 +154,14 @@ class Login extends Component{
                            
                         })
 
-                        this.hideLoader();
+                        
                     }
                 })
                 .catch((error)=>{
                     this.hideLoader();
 
                     Toast.show({
-                        text:'Ops!! Network Connection Error',
+                        text:'Ops!! Network Connection Problem',
                         buttonText:'Okay',
                         style:{backgroundColor:'gray'}
                        

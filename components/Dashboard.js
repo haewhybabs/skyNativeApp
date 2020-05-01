@@ -52,85 +52,130 @@ class Dashboard extends Component{
 
         return ( 
             <Container>
-                <Content>
-                <ImageBackground source={require('../assets/img/bimage.jpg')} style={styles.image}>
-                        <Text style={{color:'#f8f9fa',alignSelf:'flex-end', marginRight:10,fontWeight:'bold',fontSize:20,marginTop:3}}>LOAN PLANS</Text>
-                        <Text style={{alignSelf:'flex-start', marginLeft:'3%', marginTop:30, color:'#f8f9fa'}}>Monthly Interest</Text>
-                        <Grid>
-                            <Text style={{fontSize:25,marginTop:10,marginLeft:'3%', color:'#f8f9fa',fontWeight:'bold'}}>0.95%</Text>
-                            <Col>
-                                <Button rounded info style={{alignSelf:'flex-end',marginTop:20,marginRight:10,width:120,height:30,backgroundColor:'#00CCFF'}}><Text style={{color:'#f8f9fa',width:'100%',textAlign:'center',fontWeight:'bold'}}>Get Started</Text></Button>
-                            </Col>
-                        </Grid>                     
-                    </ImageBackground>
-
-                    <View style={{marginTop:30,alignItems:'center'}}>
-                        <Text style={{color:'gray',fontSize:15,fontWeight:'bold'}}>All Loan Plans</Text>
-                    </View>
-
-                    
-
-                    <Grid style={{marginTop:30}}>
-
-                        <Col>
-
-                            <Card>
-                                <CardItem>
-                                    <Icon active name="swap" style={{color:'#e83e8c'}}/>
-                                    <Text style={{fontWeight:'bold'}}>MINI</Text>
-                                    <Right>
-                                        <Icon name="arrow-forward" />
-                                    </Right>
-                                </CardItem>
-                                <CardItem>
-                                    <Text style={{letterSpacing:2}}>₦5000-₦49000</Text>  
-                                </CardItem>
-                            </Card>
-                        </Col>
-
-                        <Col>
-                            <Card>
-                                <CardItem>
-                                    <Icon active name="swap" style={{color:'#e83e8c'}}/>
-                                    <Text style={{fontWeight:'bold'}}>MIDI</Text>
-                                    <Right>
-                                        <Icon name="arrow-forward" />
-                                    </Right>
-                                </CardItem>
-                                <CardItem>
-                                    <Text style={{letterSpacing:2}}>₦50000-₦149000</Text>  
-                                </CardItem>
-                            </Card>
-                        </Col>
-
-                    </Grid>
-
-                    
-                    <Card style={{alignItems:'center',marginTop:20}}>
-                        <CardItem>
-                            <Icon active name="md-share" style={{color:'#e83e8c'}}/>
-                            <Text style={{fontWeight:'bold'}}>MAXI</Text>
-                            <Right>
-                                <Icon name="arrow-forward" />
-                            </Right>
-                        </CardItem>
-                        <CardItem>
-                            <Text style={{letterSpacing:2}}>₦15000-₦250000</Text>  
-                        </CardItem>
-                    </Card> 
-                    
-                    
-                    <View style={{marginTop:25,alignItems:'center'}}>
-                        <Button block style={{alignSelf:'center', backgroundColor:'#00CCFF'}}>
-                            <Text style={{width:'100%',textAlign:'center', color:'#fff', fontWeight:'bold'}}>Make a Loan Request</Text>
-                            
+                <Header>
+                    <Left>
+                        <Button transparent>
+                            <Icon name='menu' />
                         </Button>
-                    </View>
+                    </Left>
+                    <Body>
+                        <Title>Dashboard</Title>
+                    </Body>
+                    <Right />
+                </Header>
+                <Content>
+                    <View style={{marginLeft:10, marginRight:10}}>
+                        <Text style={{fontSize:18,fontWeight:'bold',marginTop:10,color:'#00CCFF'}}>Hello Ayobami</Text>
+                        <Text style={{marginTop:18}}>Loan Details</Text>
+                        <Grid style={{marginTop:5}}>
+                            <Col>
+                                <Card>
 
+                                    <CardItem>
+                                        <Icon active name="md-contract" style={{color:'#e83e8c'}}/>
+                                        
+                                        <Text>Active Loan</Text>
+                                    </CardItem>
+                                    <CardItem>
+                                        
+                                        
+                                        
+                                    <Text style={{fontWeight:'bold', fontSize:18}}>₦50,000</Text>
+                                        <Right>
+                                            <Icon name="arrow-forward" style={{color:'#00CCFF'}} />
+                                        </Right>
+                                    </CardItem>
+                                </Card>
+                            </Col>
+
+                            <Col>
+                                <Card>
+                                    <CardItem>
+                                        <Icon active name="md-information-circle" style={{color:'#e83e8c'}}/>
+                                        
+                                        <Text>Loan Percentage</Text>
+                                    </CardItem>
+                                    <CardItem>
+                                        
+                                        
+                                        
+                                    <Text style={{fontWeight:'bold', fontSize:18}}>0.95%</Text>
+                                        <Right>
+                                            <Icon name="arrow-forward" style={{color:'#00CCFF'}} />
+                                        </Right>
+                                    </CardItem>
+                                </Card>
+                            </Col>
+                        </Grid>
+
+                        <Grid>
+                            <Col>
+                                <Card>
+                                    <CardItem>
+                                        <Icon active name="md-time" style={{color:'#e83e8c'}}/>
+                                            
+                                        <Text>Loan Duration</Text>
+                                    </CardItem>
+                                    <CardItem>
+                                        <Text style={{fontWeight:'bold', fontSize:18}}>30 DAYS</Text>
+                                        <Right>
+                                            <Icon name="arrow-forward" style={{color:'#00CCFF'}} />
+                                        </Right>
+                                    </CardItem>
+                                </Card>
+                            </Col>
+
+                            <Col>
+                                <Card>
+                                    <CardItem>
+                                    <Icon active name="md-stats" style={{color:'#e83e8c'}}/>
+                                        
+                                        <Text>Expected Payment</Text>
+                                    </CardItem>
+                                    <CardItem>
+                                        <Text style={{fontWeight:'bold', fontSize:18}}>₦50,000</Text>
+                                        <Right>
+                                            <Icon name="arrow-forward" style={{color:'#00CCFF'}} />
+                                        </Right>
+                                    </CardItem>
+                                </Card>
+                            </Col>
+                        </Grid>
+
+                        <Text style={{fontWeight:'bold', marginTop:10}}>Loan Plans</Text>
+
+                        <Card>
+                            <CardItem>
+                                <Icon active name="planet" style={{color:'#e83e8c'}}/>
+                                <Text style={{fontWeight:'bold'}}>MINI</Text>
+                                <Right>
+                                    <Text style={{fontWeight:'bold'}}>₦5,000-₦49,000</Text>
+                                </Right>
+                            </CardItem>
+                        </Card>
+
+                        <Card>
+                            <CardItem>
+                                <Icon active name="nutrition" style={{color:'#e83e8c'}}/>
+                                <Text style={{fontWeight:'bold'}}>MIDI</Text>
+                                <Right>
+                                    <Text style={{fontWeight:'bold'}}>₦50,000-₦149,000</Text>
+                                </Right>
+                            </CardItem>
+                        </Card>
+                        <Card>
+                            <CardItem>
+                                <Icon active name="star" style={{color:'#e83e8c'}}/>
+                                <Text style={{fontWeight:'bold'}}>MAXI</Text>
+                                <Right>
+                                    <Text style={{fontWeight:'bold'}}>₦150,000-₦250,000</Text>
+                                </Right>
+                            </CardItem>
+                        </Card>
+                    </View>
                     
                 </Content>
                 <FooterScreen navigation={this.props.navigation}/>
-                
             </Container>
         )
 

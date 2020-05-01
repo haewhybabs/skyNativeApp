@@ -14,14 +14,14 @@ import {
 import{
     Container,Header,Body,CheckBox,Title,Card,
     CardItem,Left,Right,Content,Grid,
-    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail
+    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail,Picker
 } from 'native-base';
 import {apiUrl,token,vendorImage} from '../Config';
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {saveUserDetailsAction} from '../redux/actions';
+
 import FooterScreen from './Footer';
 import ProfileModal from './ProfileModal';
 class Profile extends Component{
@@ -30,14 +30,76 @@ class Profile extends Component{
         super()
 
         this.state = {
+           userInfo:[],
+           employmentInfo:[],
+           nextOfKinInfo:[],
+           bankInfo:[],
+           employmentType:[],
+           salaryRange:[],
+           banks:[],
+           states:[],
+           lgs:[],
+           percentage:'',
+           relationship:[],
+           sex:[],
+           maritalStatus:[],
+           status:'',
+           isLoading:true,
            userOpen:false,
           
         }
        
     }
+   
 
-    componentDidMount(){
+    componentDidMount()
+    {
        
+        const user = this.props.user; 
+
+        fetch(apiUrl+'profile',{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'token':token,
+                'Authorization':'Bearer '+user.token
+            }
+            
+        })
+        .then(response => {
+                                
+            return response.json();      
+        })
+        .then((contents)=>{
+
+            this.setState({
+
+                userInfo:contents.userInfo,
+                employmentInfo:contents.employmentInfo,
+                nextOfKinInfo:contents.nextOfkinInfo,
+                bankInfo:contents.bankInfo,
+                employmentType:contents.employmentType,
+                salaryRange:contents.salaryRange,
+                banks:contents.banks,
+                states:contents.states,
+                lgs:contents.lgs,
+                percentage:contents.percentage,
+                relationship:contents.relationship,
+                sex:contents.sex,
+                maritalStatus:contents.marital_status,
+                status:contents.status,
+                isLoading:false,
+
+            });
+        })
+        .catch((error)=>{
+            Toast.show({
+                text:'Error Occured!!',
+                buttonText:'Okay',
+                style:{backgroundColor:'gray'}
+               
+            })
+        })
 
     }
 
@@ -47,93 +109,127 @@ class Profile extends Component{
         })
     }
 
+    showLoader = () => {
+        this.setState({isLoading:true})
+    }
+
+    hideLoader = () =>{
+        this.setState({isLoading:false})
+        
+    }
+
+   
+
+    refresh = () => {
+
+        this.componentDidMount();
+    }
+
     render(){
 
-        
-
-        
+    
 
         
 
         return ( 
-            <Container>
-                <Content>
-                    <ProfileModal 
-                     navigation={this.props.navigation} 
-                     userOpen={this.state.userOpen}
-                     userModal={this.userModal}
-                    />
-                    <Body>
-                        <Icon active name="person" style={{color:'#e83e8c'}}/>
 
-                        <Text style={{fontWeight:'bold'}}>Ayobami Babalola</Text>
+            this.state.isLoading
+            ?
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                <ActivityIndicator size="large" color="#00CCFF" animating  />
+            </View>
+            :
+            <Root>
+                <Container>
+                    <Content scrollEnabled={true}>
+                        <ProfileModal
+                        maritalStatus ={this.state.maritalStatus}
+                        sex ={this.state.sex}
+                        navigation={this.props.navigation} 
+                        userOpen={this.state.userOpen}
+                        userModal={this.userModal}
+                        userInfo = {this.state.userInfo}
+                        states= {this.state.states}
+                        lgs = {this.state.lgs}
+                        user = {this.props.user}
 
-                        <Text style={{marginTop:3}}>+2348 1353 73563</Text>
+                        showLoader={this.showLoader}
+                        hideLoader = {this.hideLoader}
+                        refresh = {this.refresh}
+                        
+                        />
+                        <Body>
+                            <Icon active name="person" style={{color:'#e83e8c'}}/>
 
-                        <Text style={{marginTop:3}}>Obafemi Awolowo University</Text>
-                        <Text style={{marginTop:3,fontWeight:'bold'}}>Complete Profile: 100%</Text>    
-                    </Body>
-                    <View style={{borderBottomColor:'#e83e8c',borderBottomWidth:3,alignSelf:'stretch',marginTop:10}}/>
+                            <Text style={{fontWeight:'bold'}}>{this.state.userInfo.fullname}</Text>
 
-                    <View style={{marginTop:25,alignItems:'center'}}>
-                        <Text style={{color:'gray',fontWeight:'bold'}}>Account Information</Text>
-                    </View>
+                            <Text style={{marginTop:3}}>{this.state.userInfo.phone_number}</Text>
 
+                            <Text style={{marginTop:3}}>{this.state.userInfo.address}</Text>
+                            <Text style={{marginTop:3,fontWeight:'bold'}}>Complete Profile: {this.state.percentage}%</Text>    
+                        </Body>
+                        <View style={{borderBottomColor:'#e83e8c',borderBottomWidth:3,alignSelf:'stretch',marginTop:10}}/>
 
-                    <TouchableOpacity onPress={()=>this.userModal(true)}>
-
-                        <Card style={{marginTop:10}}>
-                            <CardItem>
-                                <Icon active name="person" style={{color:'#00CCFF'}} />
-                                <Text>User Information</Text>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </CardItem>
-                        </Card>
-                    </TouchableOpacity>
+                        <View style={{marginTop:25,alignItems:'center'}}>
+                            <Text style={{color:'gray',fontWeight:'bold'}}>Account Information</Text>
+                        </View>
 
 
-                    <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.userModal(true)}>
 
-                        <Card>
-                            <CardItem>
-                                <Icon active name="home" style={{color:'#00CCFF'}}/>
-                                <Text>Bank Information</Text>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </CardItem>
-                        </Card>
-                    </TouchableOpacity>
+                            <Card style={{marginTop:10}}>
+                                <CardItem>
+                                    <Icon active name="person" style={{color:'#00CCFF'}} />
+                                    <Text>User Information</Text>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </CardItem>
+                            </Card>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity>
-                        <Card>
-                            <CardItem>
-                                <Icon active name="md-document" style={{color:'#00CCFF'}}/>
-                                <Text>Employment Information</Text>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </CardItem>
-                        </Card>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity>
-                        <Card>
-                            <CardItem>
-                                <Icon active name="man" style={{color:'#00CCFF'}}/>
-                                <Text>Next Of Kin Information</Text>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </CardItem>
-                        </Card>
-                    </TouchableOpacity>
-                </Content>
-                <FooterScreen navigation={this.props.navigation}/>
-                
-            </Container>
+                        <TouchableOpacity>
+
+                            <Card>
+                                <CardItem>
+                                    <Icon active name="home" style={{color:'#00CCFF'}}/>
+                                    <Text>Bank Information</Text>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </CardItem>
+                            </Card>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity>
+                            <Card>
+                                <CardItem>
+                                    <Icon active name="md-document" style={{color:'#00CCFF'}}/>
+                                    <Text>Employment Information</Text>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </CardItem>
+                            </Card>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity>
+                            <Card>
+                                <CardItem>
+                                    <Icon active name="man" style={{color:'#00CCFF'}}/>
+                                    <Text>Next Of Kin Information</Text>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </CardItem>
+                            </Card>
+                        </TouchableOpacity>
+                    </Content>
+                    <FooterScreen navigation={this.props.navigation}/>
+                    
+                </Container>
+            </Root>
         )
 
     }
@@ -161,4 +257,14 @@ const styles = StyleSheet.create({
 });
 
 
-export default Profile;
+const mapStateToProp = (state) =>{
+    return {
+       
+        user:state.user,
+
+    }
+  }
+  
+  
+  
+  export default connect(mapStateToProp)(Profile);

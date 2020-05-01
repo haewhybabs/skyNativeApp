@@ -8,109 +8,415 @@ import {
   ActivityIndicator,
   ImageBackground,
   Text,
-  Modal
+  Modal,
+  FlatList,
+  ScrollView
    } from 'react-native';
 
 import{
     Container,Header,Body,CheckBox,Title,Card,
     CardItem,Left,Right,Content,Grid,
-    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail
+    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail,Picker,DatePicker
 } from 'native-base';
-
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {materialIcons, MaterialIcons} from '@expo/vector-icons';
 import FooterScreen from './Footer';
+import {apiUrl,token,vendorImage} from '../Config';
 
 class ProfileModal extends Component{
     
-    constructor(){
-        super()
+    constructor(props){
+
+        super(props);
 
         this.state = {
-           userOpen:false
+           userOpen:false,
+           userMaritalStatus:props.userInfo.marital_status,
+           chosenDate:'',
+           phone_number:props.userInfo.phone_number,
+           email:props.userInfo.email,
+           fullname:props.userInfo.fullname,
+           address:props.userInfo.address,
+           userLg:props.userInfo.lg_id,
+           userSex:props.userInfo.sex,
+           userState:props.userInfo.state_id,
+           
+           selectedLgs:[],
+           chosenDate:'',
+           userLgName:'',
+           userSexName:'',
+           userStateName:'',
+           userMaritalStatusName:''
+
           
         }
+
+        this.setDate = this.setDate.bind(this);
        
     }
 
     componentDidMount(){
+
+        var lg = this.props.lgs.filter(lgs=> lgs.idlgs == this.props.userInfo.lg_id);
+
+        var states = this.props.states.filter(states=> states.idstates == this.props.userInfo.state_id);
+
+        var sex = this.props.sex.filter(sex=> sex.idsex == this.props.userInfo.sex);
+        
+        var maritalStatus = this.props.maritalStatus.filter(ms=> ms.idmaritalstatus == this.props.userInfo.marital_status);
+        
+
+
+       
+
+        if(lg.length>0){
+            this.setState({
+                userLgName:lg[0].lgs,
+                userSexName:sex[0].name,
+                userStateName:states[0].names,
+                userMaritalStatusName:maritalStatus[0].name
+
+            })
+
+        }
+
        
 
     }
 
+    componentWillReceiveProps(props){
+        this.setState({
+            userMaritalStatus:props.userInfo.marital_status,
+           chosenDate:'',
+           phone_number:props.userInfo.phone_number,
+           email:props.userInfo.email,
+           fullname:props.userInfo.fullname,
+           address:props.userInfo.address,
+           userLg:props.userInfo.lg_id,
+           userSex:props.userInfo.sex,
+           userState:props.userInfo.state_id,
+        })
+
+        var lg = this.props.lgs.filter(lgs=> lgs.idlgs == props.userInfo.lg_id);
+
+        var states = this.props.states.filter(states=> states.idstates == props.userInfo.state_id);
+
+        var sex = this.props.sex.filter(sex=> sex.idsex == props.userInfo.sex);
+        
+        var maritalStatus = this.props.maritalStatus.filter(ms=> ms.idmaritalstatus == props.userInfo.marital_status);
+        
+
+
+       
+
+        if(lg.length>0){
+            this.setState({
+                userLgName:lg[0].lgs,
+                userSexName:sex[0].name,
+                userStateName:states[0].names,
+                userMaritalStatusName:maritalStatus[0].name
+
+            })
+
+        }
+        // nextState.address =nextProps.userInfo.address;
+    }
+
+    onValueUserStateChange(value) {
+        this.setState({
+            userState:value,
+        });
+
+
+        var lg = this.props.lgs.filter(lgs=> lgs.state_id == value);
+        
+        this.setState({
+            selectedLgs:lg
+        });
+    }
+
+
+    onValueUserLgChange(value) {
+        this.setState({
+            userLg:value,
+        });
+    }
+
+    onValueUserSexChange(value) {
+        this.setState({
+            userSex:value,
+        });
+    }
+
+    onValueUserMaritalStatusChange(value) {
+        this.setState({
+            userMaritalStatus:value,
+        });
+    }
+
+    setDate(newDate) {
+        this.setState({ chosenDate: newDate });
+    }
+
+    updateHandler()
+    {
+        
+        const user = this.props.user;
+        const value = this.state;
+
+        this.props.userModal(false);
+        this.props.showLoader();
+       
+
+        fetch(apiUrl+'user-profile',{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'token':token,
+                'Authorization':'Bearer '+user.token,
+                'Accept': 'application/json',
+            },
+
+            body: JSON.stringify({
+                fullname:value.fullname,
+                address:value.address,
+                phone_number:value.phone_number,
+                lg_id:value.userLg,
+                state_id:value.userState,
+                sex:value.userSex,
+                marital_status:value.userMaritalStatus,
+                dob:value.chosenDate,
+            })
+
+            
+            
+        })
+        .then(response => {
+
+
+            
+                                
+            return response.json();   
+             
+        })
+        .then((contents)=>{
+            this.props.refresh();
+            this.props.hideLoader();            
+            
+
+            if(contents.status){
+                
+
+
+            
+
+                Toast.show({
+                    text:'Success!!',
+                    buttonText:'Okay',
+                    style:{backgroundColor:'green'}
+                
+                });
+            }
+
+            else{
+                Toast.show({
+                    text:'All fields are required!!',
+                    buttonText:'Okay',
+                    style:{backgroundColor:'red'}
+                
+                });
+            }
+
+        })
+        .catch((error)=>{
+            this.props.refresh();
+            this.componentDidMount();
+            this.props.hideLoader();
+            Toast.show({
+                text:'Error Occured!!',
+                buttonText:'Okay',
+                style:{backgroundColor:'gray'}
+               
+            })
+
+            
+        })
+
+        
+    }
+
     render(){
 
-        
-
-        
-
-        
-
         return (
-
-        
-                <View>
+            
                     <Modal visible={this.props.userOpen}>
-                        <View>                                        
-                            <MaterialIcons
-                                name='close'
-                                size={24}
-                                style={styles.modalToggle}
-                                onPress={()=>this.props.userModal(false)}
-                            /> 
-                        </View>
-                        <View style={{alignItems:'center'}}>
-                            <Text style={{fontWeight:'bold'}}>User Information Details</Text>
-                        </View>
 
-                        <View style={{borderBottomColor:'#e83e8c',borderBottomWidth:3,alignSelf:'stretch',marginTop:10}}/>
-
-                        <Form>
-                            <Item floatingLabel>
-                                <Label>Full Name</Label>
-                                <Input onChangeText={(email) => this.setState({email})}/>
-                            </Item>
-                            <Item floatingLabel last>
-                                <Label>Phone Number</Label>
-                                <Input  onChangeText={(password) => this.setState({password})}/>
-                            </Item>
-
-                            <Item floatingLabel>
-                                <Label>Address</Label>
-                                <Input  onChangeText={(password) => this.setState({password})}/>
-                            </Item>
-
-                            <Item floatingLabel>
-                                <Label>Date of Birth</Label>
-                                <Input onChangeText={(password) => this.setState({password})}/>
-                            </Item>
-
-                            <Item floatingLabel>
-                                <Label>Marital Status</Label>
-                                <Input onChangeText={(password) => this.setState({password})}/>
-                            </Item>
-
-                            <Item floatingLabel>
-                                <Label>State</Label>
-                                <Input secureTextEntry onChangeText={(password) => this.setState({password})}/>
-                            </Item>
-
-                            <Item floatingLabel>
-                                <Label>Local Government</Label>
-                                <Input secureTextEntry onChangeText={(password) => this.setState({password})}/>
-                            </Item>
-
-                            <View style={{marginTop:50}}>
-                                <Button rounded primary style={{width:'100%',backgroundColor:'#00CCFF'}}>
-                                    <Text style={{width: '100%',textAlign: 'center',color:'#fff',fontSize:20}}>Update</Text>
-                                </Button>
+                        <ScrollView>
+                            <View>                                        
+                                <MaterialIcons
+                                    name='close'
+                                    size={24}
+                                    style={styles.modalToggle}
+                                    onPress={()=>this.props.userModal(false)}
+                                /> 
                             </View>
-                        </Form>
+                            <View style={{alignItems:'center'}}>
+                                <Text style={{fontWeight:'bold'}}>User Information Details</Text>
+                            </View>
+
+                            <View style={{borderBottomColor:'#e83e8c',borderBottomWidth:3,alignSelf:'stretch',marginTop:10}}/>
+
+                            <Form>
+                                <Item floatingLabel>
+                                    <Label>Full Name</Label>
+                                    <Input onChangeText={(fullname) => this.setState({fullname})} value={this.state.fullname}/>
+                                </Item>
+                                <Item floatingLabel last>
+                                    <Label>Phone Number</Label>
+                                    <Input  onChangeText={(phone_number) => this.setState({phone_number})} value={this.state.phone_number}/>
+                                </Item>
+
+                                <Item floatingLabel>
+                                    <Label>Address</Label>
+                                    <Input  onChangeText={(address) => this.setState({address})} value={this.state.address}/>
+                                </Item>
+                                    <DatePicker
+                                    defaultDate={new Date(2018, 4, 4)}
+                                    minimumDate={new Date(1920, 1, 1)}
+                                    maximumDate={new Date()}
+                                    locale={"en"}
+                                    timeZoneOffsetInMinutes={undefined}
+                                    modalTransparent={false}
+                                    animationType={"fade"}
+                                    androidMode={"default"}
+                                    placeHolderText="Date of birth"
+                                    textStyle={{ color: "green" }}
+                                    placeHolderTextStyle={{ color: "#d3d3d3" }}
+                                    onDateChange={this.setDate}
+                                    disabled={false}
+                                    />
+                                    <Text>
+                                    Date: {this.state.chosenDate.toString().substr(4, 12)}
+                                    </Text>
+                                
+
+                                <Label style={{marginTop:20,marginLeft:10}}>Select Sex</Label>
+                                <Item picker>
+                                    <Picker
+                                        mode="dropdown"
+                                        iosIcon={<Icon name="arrow-down" />}
+                                    
+                                        placeholderStyle={{ color: "#bfc6ea" }}
+                                        placeholderIconColor="#007aff"
+                                        selectedValue={this.state.userSex}
+                                        onValueChange={this.onValueUserSexChange.bind(this)}
+                                        >
+
+                                        {this.state.userSex !='' ?
+                                            <Picker.Item label={this.state.userSexName} value={this.state.userSex}/>
+
+                                            :null
+                                    
+                                        }
+
+                                        {this.props.sex.map((row, index) => (
+                                            <Picker.Item label={row.name} value={row.idsex} key={row.idsex} />
+                                        ))}          
+                                    </Picker>
+                                </Item>
+
+                                <Label style={{marginTop:20,marginLeft:10}}>Marital Status</Label>
+                                <Item picker>
+                                    <Picker
+                                        mode="dropdown"
+                                        iosIcon={<Icon name="arrow-down" />}
+                                    
+                                        placeholderStyle={{ color: "#bfc6ea" }}
+                                        placeholderIconColor="#007aff"
+                                        selectedValue={this.state.userMaritalStatus}
+                                        onValueChange={this.onValueUserMaritalStatusChange.bind(this)}
+                                        >
+
+                                        {this.state.userMaritalStatus !='' ?
+                                            <Picker.Item label={this.state.userMaritalStatusName} value={this.state.userMaritalStatus}/>
+
+                                            :null
+                                    
+                                        }
+
+                                        {this.props.maritalStatus.map((row, index) => (
+                                            <Picker.Item label={row.name} value={row.idmaritalstatus} key={row.idmaritalstatus} />
+                                        ))}          
+                                    </Picker>
+                                </Item>
+
+
+                                <Label style={{marginLeft:10}}>Select State</Label>
+                                <Item picker>
+                                    <Picker
+                                        mode="dropdown"
+                                        iosIcon={<Icon name="arrow-down" />}
+                                    
+                                        placeholderStyle={{ color: "#bfc6ea" }}
+                                        placeholderIconColor="#007aff"
+                                        selectedValue={this.state.userState}
+                                        onValueChange={this.onValueUserStateChange.bind(this)}
+                                        >
+
+                                        {this.state.userState !='' ?
+                                            <Picker.Item label={this.state.userStateName} value={this.state.userState}/>
+
+                                            :null
+                                    
+                                        }
+
+                                        {this.props.states.map((row, index) => (
+                                            <Picker.Item label={row.names} value={row.idstates} key={row.idstates} />
+                                        ))} 
+                                    </Picker>
+                                </Item>
+
+                                <Label style={{marginLeft:10}}>Select Local Government</Label>
+                                <Item picker>
+                                    <Picker
+                                        mode="dropdown"
+                                        iosIcon={<Icon name="arrow-down" />}
+                                    
+                                        placeholderStyle={{ color: "#bfc6ea" }}
+                                        placeholderIconColor="#007aff"
+                                        selectedValue={this.state.userLg}
+                                        onValueChange={this.onValueUserLgChange.bind(this)}
+                                        >
+
+                                        {this.state.userLg !='' ?
+                                            <Picker.Item label={this.state.userLgName} value={this.state.userLg}/>
+
+                                            :null
+                                    
+                                        }
+
+                                        
+
+                                        {this.state.selectedLgs.map((row, index) => (
+                                            <Picker.Item label={row.lgs} value={row.idlgs} key={row.idlgs} />
+                                        ))}       
+                                    </Picker>
+                                </Item>
+
+                                <View style={{marginTop:20,marginBottom:20}}>
+                                    <Button rounded primary style={{width:'100%',backgroundColor:'#00CCFF'}} onPress={this.updateHandler.bind(this)}>
+                                        <Text style={{width: '100%',textAlign: 'center',color:'#fff',fontSize:20}}>Update</Text>
+                                    </Button>
+                                </View>
+                            </Form>
+                        </ScrollView>
                         
                     </Modal>
                 
                 
 
-            </View>
+            
         )
 
     }
@@ -136,4 +442,5 @@ const styles = StyleSheet.create({
 });
 
 
-export default ProfileModal;
+
+  export default ProfileModal;
