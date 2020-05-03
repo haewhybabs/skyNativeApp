@@ -38,6 +38,17 @@ class Loans extends Component{
 
     }
 
+    errorInConnection = () => {
+        this.hideLoader();
+
+        Toast.show({
+            text:'Ops!! Network Connection Problem',
+            buttonText:'Okay',
+            style:{backgroundColor:'red'}
+            
+        })
+    }
+
     onValueChange2(value) {
         this.setState({
           loanPlanInput: value

@@ -37,6 +37,17 @@ class History extends Component{
 
     }
 
+    errorInConnection = () => {
+        this.hideLoader();
+
+        Toast.show({
+            text:'Ops!! Network Connection Problem',
+            buttonText:'Okay',
+            style:{backgroundColor:'red'}
+            
+        })
+    }
+
     render(){
 
         

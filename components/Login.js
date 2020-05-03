@@ -82,6 +82,17 @@ class Login extends Component{
         }
     }
 
+    errorInConnection = () => {
+        this.hideLoader();
+
+        Toast.show({
+            text:'Ops!! Network Connection Problem',
+            buttonText:'Okay',
+            style:{backgroundColor:'red'}
+            
+        })
+    }
+
 
     loginHandler = () => {
         Keyboard.dismiss();
@@ -98,7 +109,7 @@ class Login extends Component{
                 Toast.show({
                     text:'Invalid Email',
                     buttonText:'Okay',
-                    style:{backgroundColor:'gray'}
+                    style:{backgroundColor:'red'}
                    
                 })
             }
@@ -150,7 +161,7 @@ class Login extends Component{
                         Toast.show({
                             text:'Invalid Email or Password',
                             buttonText:'Okay',
-                            style:{backgroundColor:'gray'}
+                            style:{backgroundColor:'red'}
                            
                         })
 
@@ -158,15 +169,8 @@ class Login extends Component{
                     }
                 })
                 .catch((error)=>{
-                    this.hideLoader();
-
-                    Toast.show({
-                        text:'Ops!! Network Connection Problem',
-                        buttonText:'Okay',
-                        style:{backgroundColor:'gray'}
-                       
-                    })
-                    console.log(error)
+                    this.errorInConnection();
+                    
                 })
               
             }
@@ -180,7 +184,7 @@ class Login extends Component{
             Toast.show({
                 text:'The fields are required',
                 buttonText:'Okay',
-                style:{backgroundColor:'gray'}
+                style:{backgroundColor:'red'}
                
             })
         }
@@ -213,10 +217,10 @@ class Login extends Component{
                             <View>
                                 {this.state.email=='' ?
                                     
-                                <Text style={{marginTop:100, color:'#007bff', fontSize:30,alignSelf:'flex-start', marginLeft:5,fontWeight:'bold'}}>Welcome ,</Text>
+                                <Text style={{marginTop:100, color:'#00CCFF', fontSize:30,alignSelf:'flex-start', marginLeft:5,fontWeight:'bold'}}>Welcome ,</Text>
                                 :
 
-                                <Text style={{marginTop:100, color:'#007bff', fontSize:30,alignSelf:'flex-start', marginLeft:5,fontWeight:'bold'}}>Welcome {this.state.username},</Text>
+                                <Text style={{marginTop:100, color:'#00CCFF', fontSize:30,alignSelf:'flex-start', marginLeft:5,fontWeight:'bold'}}>Welcome {this.state.username},</Text>
                                     
                             
                                 }
@@ -225,7 +229,7 @@ class Login extends Component{
                             </View>    
                                 
                                 <Form style={{marginTop:90}}>
-                                {this.state=='' ?
+                                {this.state.email=='' ?
                                     
                                     <Item floatingLabel>
                                         <Label>Email</Label>
@@ -235,7 +239,7 @@ class Login extends Component{
 
                                     <Item floatingLabel>
                                         <Label>Email</Label>
-                                        <Input onChangeText={(email) => this.setState({email})} disabled value={this.state.email}/>
+                                        <Input onChangeText={(email) => this.setState({email})} value={this.state.email}/>
                                     </Item>
                             
                             

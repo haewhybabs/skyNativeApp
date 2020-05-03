@@ -24,6 +24,9 @@ import {bindActionCreators} from 'redux';
 
 import FooterScreen from './Footer';
 import ProfileModal from './ProfileModal';
+import BankProfileModal from './BankProfileModal';
+import EmploymentProfileModal from './EmploymentProfileModal';
+import NextOfKinProfileModal from './NextOfKinProfileModal';
 class Profile extends Component{
     
     constructor(){
@@ -46,6 +49,9 @@ class Profile extends Component{
            status:'',
            isLoading:true,
            userOpen:false,
+           bankOpen:false,
+           employmentOpen:false,
+           nextOfKinOpen:false,
           
         }
        
@@ -72,11 +78,13 @@ class Profile extends Component{
         })
         .then((contents)=>{
 
+          
+
             this.setState({
 
                 userInfo:contents.userInfo,
                 employmentInfo:contents.employmentInfo,
-                nextOfKinInfo:contents.nextOfkinInfo,
+                nextOfKinInfo:contents.nextOfKin,
                 bankInfo:contents.bankInfo,
                 employmentType:contents.employmentType,
                 salaryRange:contents.salaryRange,
@@ -93,19 +101,44 @@ class Profile extends Component{
             });
         })
         .catch((error)=>{
-            Toast.show({
-                text:'Error Occured!!',
-                buttonText:'Okay',
-                style:{backgroundColor:'gray'}
-               
-            })
+            
+            this.errorInConnection();
         })
 
+    }
+
+    errorInConnection = () => {
+        this.hideLoader();
+
+        Toast.show({
+            text:'Ops!! Network Connection Problem',
+            buttonText:'Okay',
+            style:{backgroundColor:'red'}
+            
+        })
     }
 
     userModal = (status) =>{
         this.setState({
             userOpen:status
+        })
+    }
+
+    bankModal = (status) =>{
+        this.setState({
+            bankOpen:status
+        })
+    }
+
+    employmentModal = (status) =>{
+        this.setState({
+            employmentOpen:status
+        })
+    }
+
+    nextOfKinModal = (status) =>{
+        this.setState({
+            nextOfKinOpen:status
         })
     }
 
@@ -156,8 +189,49 @@ class Profile extends Component{
                         showLoader={this.showLoader}
                         hideLoader = {this.hideLoader}
                         refresh = {this.refresh}
+                        bankOpen={this.state.bankOpen}
                         
                         />
+
+                        <BankProfileModal
+                        banks={this.state.banks}
+                        bankDetails={this.state.bankInfo}
+                        bankModal={this.bankModal}
+                        bankOpen={this.state.bankOpen}
+                        user = {this.props.user}
+                        showLoader={this.showLoader}
+                        hideLoader = {this.hideLoader}
+                        refresh = {this.refresh}
+                        />
+
+                        <EmploymentProfileModal
+                        states= {this.state.states}
+                        lgs = {this.state.lgs}
+                        salaryRange={this.state.salaryRange}
+                        employmentType ={this.state.employmentType}
+                        employmentInfo={this.state.employmentInfo}
+                        employmentModal={this.employmentModal}
+                        employmentOpen={this.state.employmentOpen}
+                        user = {this.props.user}
+                        showLoader={this.showLoader}
+                        hideLoader = {this.hideLoader}
+                        refresh = {this.refresh}    
+                        />
+
+
+                        <NextOfKinProfileModal
+                        states= {this.state.states}
+                        lgs = {this.state.lgs}
+                        nextOfKinModal={this.nextOfKinModal}
+                        nextOfKinOpen={this.state.nextOfKinOpen}
+                        nextOfKinDetails={this.state.nextOfKinInfo}
+                        user = {this.props.user}
+                        showLoader={this.showLoader}
+                        hideLoader = {this.hideLoader}
+                        refresh = {this.refresh}    
+                        />
+
+
                         <Body>
                             <Icon active name="person" style={{color:'#e83e8c'}}/>
 
@@ -189,7 +263,7 @@ class Profile extends Component{
                         </TouchableOpacity>
 
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.bankModal(true)}>
 
                             <Card>
                                 <CardItem>
@@ -202,7 +276,7 @@ class Profile extends Component{
                             </Card>
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.employmentModal(true)}>
                             <Card>
                                 <CardItem>
                                     <Icon active name="md-document" style={{color:'#00CCFF'}}/>
@@ -214,7 +288,7 @@ class Profile extends Component{
                             </Card>
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.nextOfKinModal(true)}>
                             <Card>
                                 <CardItem>
                                     <Icon active name="man" style={{color:'#00CCFF'}}/>

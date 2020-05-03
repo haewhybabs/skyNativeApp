@@ -28,18 +28,33 @@ class Dashboard extends Component{
         super()
 
         this.state = {
-            email:'',
-            password:'',
-            isLoading:false,
-            loading:true,
+            username:'',
+           
           
         }
        
     }
 
-    componentDidMount(){
-       
+    async componentDidMount(){
 
+        let userDetails = await AsyncStorage.getItem('userDetails');
+        let user = JSON.parse(userDetails);
+        this.setState({
+            username:user.fullname,
+            email:user.email,
+        })
+
+    }
+
+    errorInConnection = () => {
+        this.hideLoader();
+
+        Toast.show({
+            text:'Ops!! Network Connection Problem',
+            buttonText:'Okay',
+            style:{backgroundColor:'red'}
+            
+        })
     }
 
     render(){
@@ -52,20 +67,9 @@ class Dashboard extends Component{
 
         return ( 
             <Container>
-                <Header>
-                    <Left>
-                        <Button transparent>
-                            <Icon name='menu' />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>Dashboard</Title>
-                    </Body>
-                    <Right />
-                </Header>
                 <Content>
                     <View style={{marginLeft:10, marginRight:10}}>
-                        <Text style={{fontSize:18,fontWeight:'bold',marginTop:10,color:'#00CCFF'}}>Hello Ayobami</Text>
+                        <Text style={{fontSize:18,fontWeight:'bold',marginTop:10,color:'#00CCFF'}}>Hello {this.state.username}</Text>
                         <Text style={{marginTop:18}}>Loan Details</Text>
                         <Grid style={{marginTop:5}}>
                             <Col>

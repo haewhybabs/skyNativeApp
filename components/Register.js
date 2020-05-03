@@ -66,6 +66,17 @@ class Register extends Component{
         this.props.navigation('Dashboard');
     }
 
+    errorInConnection = () => {
+        this.hideLoader();
+
+        Toast.show({
+            text:'Ops!! Network Connection Problem',
+            buttonText:'Okay',
+            style:{backgroundColor:'red'}
+            
+        })
+    }
+
     validateInput = (input) =>{
 
         var value = this.state;
@@ -168,7 +179,7 @@ class Register extends Component{
                 Toast.show({
                     text:'Invalid Email',
                     buttonText:'Okay',
-                    style:{backgroundColor:'gray'}
+                    style:{backgroundColor:'red'}
                    
                 })
             }
@@ -212,7 +223,7 @@ class Register extends Component{
                         Toast.show({
                             text:message,
                             buttonText:'Okay',
-                            style:{backgroundColor:'gray'}
+                            style:{backgroundColor:'red'}
                            
                         })
 
@@ -244,21 +255,14 @@ class Register extends Component{
                     }
                 })
                 .catch((error)=>{
-                    this.hideLoader();
-
-                    Toast.show({
-                        text:'Ops!! Network Connection Problem',
-                        buttonText:'Okay',
-                        style:{backgroundColor:'gray'}
-                       
-                    })
+                    this.errorInConnection();
                     
                     this.setState({
                         password_confirmation:'',
                         password:''
                     })
 
-                    console.log(error);
+                    
                 })
               
             }
@@ -269,12 +273,6 @@ class Register extends Component{
 
         else{
             this.hideLoader();
-            Toast.show({
-                text:'The fields are required',
-                buttonText:'Okay',
-                style:{backgroundColor:'gray'}
-               
-            })
         }
 
     }
@@ -305,7 +303,7 @@ class Register extends Component{
                             <View>
                                 
 
-                                <Text style={{marginTop:10, color:'#00CCFF', fontSize:30,alignSelf:'flex-start', marginLeft:5,fontWeight:'bold'}}>Welcome,</Text>
+                                <Text style={{marginTop:50, color:'#00CCFF', fontSize:30,alignSelf:'flex-start', marginLeft:5,fontWeight:'bold'}}>Welcome,</Text>
                                     
                         
                                 

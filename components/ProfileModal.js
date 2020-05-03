@@ -268,7 +268,7 @@ class ProfileModal extends Component{
                             <View style={{borderBottomColor:'#e83e8c',borderBottomWidth:3,alignSelf:'stretch',marginTop:10}}/>
 
                             <Form>
-                                <Item floatingLabel>
+                                <Item floatingLabel last>
                                     <Label>Full Name</Label>
                                     <Input onChangeText={(fullname) => this.setState({fullname})} value={this.state.fullname}/>
                                 </Item>
@@ -281,6 +281,7 @@ class ProfileModal extends Component{
                                     <Label>Address</Label>
                                     <Input  onChangeText={(address) => this.setState({address})} value={this.state.address}/>
                                 </Item>
+                                <Label style={{marginTop:20,marginLeft:10}}>Choose your date of birth</Label>
                                     <DatePicker
                                     defaultDate={new Date(2018, 4, 4)}
                                     minimumDate={new Date(1920, 1, 1)}
@@ -297,7 +298,7 @@ class ProfileModal extends Component{
                                     disabled={false}
                                     />
                                     <Text>
-                                    Date: {this.state.chosenDate.toString().substr(4, 12)}
+                                     {this.state.chosenDate.toString().substr(4, 12)}
                                     </Text>
                                 
 

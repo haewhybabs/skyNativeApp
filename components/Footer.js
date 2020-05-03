@@ -51,23 +51,23 @@ class FooterScreen extends Component{
     render(){
         return(
             <Footer>
-                <FooterTab>
+                <FooterTab  style={{backgroundColor:'#007bff'}}>
                     <Button vertical onPress={this.DashboardHandler}>
                         <Icon name="apps" />
-                        <Text>Dashboard</Text>
+                        <Text style={{color:'#fff'}}>Dashboard</Text>
                     </Button>
                     <Button vertical onPress={this.LoansHandler}>
-                        <Icon active name="navigate" />
-                        <Text>Loan Request</Text>
+                        <Icon active name="md-create" />
+                        <Text style={{color:'#fff'}}>Loan Request</Text>
                     </Button>
 
                     <Button vertical onPress={this.LoanHistoryHandler}>
                         <Icon active name="navigate" />
-                        <Text>Loan History</Text>
+                        <Text style={{color:'#fff'}}>Loan History</Text>
                     </Button>
                     <Button vertical onPress={this.ProfileHandler}>
                         <Icon name="person" />
-                        <Text>Profile</Text>
+                        <Text style={{color:'#fff'}}>Profile</Text>
                     </Button>
                 </FooterTab>
             </Footer>

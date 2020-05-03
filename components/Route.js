@@ -10,6 +10,11 @@ import Register from './Register';
 import Loans from './Loans';
 import History from './History';
 
+import{
+    
+    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail
+} from 'native-base';
+
 
 class Route extends Component {
 
@@ -40,6 +45,7 @@ export default Route;
 
 const screens = {
 
+
     Splash: {
         screen: Splash,
         header: null,
@@ -55,7 +61,9 @@ const screens = {
         screen: Login,
         navigationOptions: () => ({
 
+            title: null,
             headerBackTitle: null,
+            headerShown: false
 
 
 
@@ -66,23 +74,41 @@ const screens = {
         screen: Register,
         navigationOptions: () => ({
 
-            headerBackTitle: null,
-
-
-
-
-        }),
-    },
-
-    Dashboard: {
-        screen: Dashboard,
-        navigationOptions: () => ({
             title: null,
             headerBackTitle: null,
             headerShown: false
 
+
+
+
         }),
     },
+
+
+    Dashboard: {
+        screen: Dashboard,
+        navigationOptions: () => ({
+            title: 'Dashbaord',
+            headerTitleStyle:{
+                color:'white'
+            },
+            headerBackTitle: null,
+            headerStyle: {
+                backgroundColor: '#007bff',
+                
+            },
+
+            headerLeft:(
+                <Button transparent>
+                    <Icon name='menu' style={{color:'#fff'}} />
+                </Button>
+            )
+
+
+        }),
+    },
+
+   
 
     Profile: {
         screen: Profile,
@@ -90,8 +116,12 @@ const screens = {
             title: 'Profile',
             headerBackTitle: null,
             headerStyle: {
-                backgroundColor: '#00CCFF'
-            }
+                backgroundColor: '#007bff',
+                
+            },
+            headerTitleStyle:{
+                color:'white'
+            },
 
 
         }),
@@ -103,8 +133,13 @@ const screens = {
             title: 'Request For Loan',
             headerBackTitle: null,
             headerStyle: {
-                backgroundColor: '#00CCFF'
-            }
+                backgroundColor: '#007bff',
+                
+            },
+
+            headerTitleStyle:{
+                color:'white'
+            },
 
 
         }),
@@ -116,8 +151,12 @@ const screens = {
             title: 'Loan History',
             headerBackTitle: null,
             headerStyle: {
-                backgroundColor: '#00CCFF'
-            }
+                backgroundColor: '#007bff',
+                
+            },
+            headerTitleStyle:{
+                color:'white'
+            },
 
 
         }),

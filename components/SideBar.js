@@ -13,7 +13,7 @@ import {  Container,Header,Body,CheckBox,Title,Card,
     import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 
-class Splash extends Component{
+class SideBar extends Component{
     
     constructor(){
         super()
@@ -28,32 +28,16 @@ class Splash extends Component{
        
     }
 
-    async componentDidMount() {
-        await Font.loadAsync({
-        'Roboto': require('native-base/Fonts/Roboto.ttf'),
-        'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-        ...Ionicons.font,
-        })
-        this.setState({ loading: false })
-        setTimeout( () => {
-            this.setTimePassed();
-        },2000);
+    componentDidMount() {
+       
     }
-
-
-
-    setTimePassed() {
-        this.setState({timePassed: true});
-    }
-
     
     
   
     render(){
 
-        if (!this.state.timePassed) {
             return (  
-                <Container style={{backgroundColor:'#007bff'}}>
+                <Container>
                     <Body>
                         <Image
                             source={require('../assets/img/splash.png')}
@@ -65,10 +49,6 @@ class Splash extends Component{
                 
                 </Container>
             );
-
-        } else {
-            return <Login route={this.props.navigation.navigate}/>;
-        }
 
         
     }
@@ -85,4 +65,4 @@ const styles = StyleSheet.create({
 
 
 
-export default Splash;
+export default SideBar;
