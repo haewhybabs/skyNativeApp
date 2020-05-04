@@ -14,11 +14,12 @@ import {
 import{
     Container,Header,Body,CheckBox,Title,Card,
     CardItem,Left,Right,Content,Grid,
-    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail
+    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail,Tabs,Tab
 } from 'native-base';
 
 import {materialIcons, MaterialIcons} from '@expo/vector-icons';
 import FooterScreen from './Footer';
+import HeaderScreen from './Header';
 
 class History extends Component{
     
@@ -26,7 +27,9 @@ class History extends Component{
         super()
 
         this.state = {
-           userOpen:false
+           userOpen:false,
+           title:'Loan History'
+
           
         }
        
@@ -60,7 +63,25 @@ class History extends Component{
 
         
             <Container>
+                <HeaderScreen navigation={this.props.navigation} title={this.state.title}/>
+                
                 <Content>
+
+                    <Tabs tabBarBackgroundColor='#fff'>
+                        <Tab heading="Pending">
+                            <Text>Hell1</Text>
+                        </Tab>
+                        <Tab heading="Active">
+                            <Text>Hell2</Text>
+                        </Tab>
+                        <Tab heading="Rejected">
+                            <Text>Hell3</Text>
+                        </Tab>
+
+                        <Tab heading="Concluded">
+                            <Text>Hell4</Text>
+                        </Tab>
+                    </Tabs>
 
                 <Card>
                     <CardItem>

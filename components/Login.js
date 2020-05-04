@@ -22,7 +22,9 @@ import {bindActionCreators} from 'redux';
 import {saveUserDetailsAction} from '../redux/actions';
 
 class Login extends Component{
-    
+    static navigationOptions = {
+        drawerLabel:()=>null
+    }
     constructor(){
         super()
 

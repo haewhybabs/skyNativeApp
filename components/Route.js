@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-
+import { 
+    StyleSheet,
+    Text,
+    Image
+     } from 'react-native';
+  
 import { createStackNavigator } from 'react-navigation-stack';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer} from 'react-navigation';
+import { createDrawerNavigator,DrawerItems } from 'react-navigation-drawer';
 import Splash from './Splash';
 import Login from './Login';
 import Dashboard from './Dashboard';
@@ -12,7 +18,7 @@ import History from './History';
 
 import{
     
-    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail
+    Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail,Container,Content,Header,Body
 } from 'native-base';
 
 
@@ -43,69 +49,70 @@ class Route extends Component {
 export default Route;
 
 
+
+
 const screens = {
 
 
     Splash: {
         screen: Splash,
         header: null,
-        navigationOptions: () => ({
-            title: null,
-            headerBackTitle: null,
-            headerShown: false
-
-        }),
+        navigationOptions:({navigation}) =>{
+            return {
+                drawerLabel: ()=> null,
+                drawerLockMode:'locked-closed'
+            }
+        }
     },
+
+    
 
     Login: {
         screen: Login,
-        navigationOptions: () => ({
-
-            title: null,
-            headerBackTitle: null,
-            headerShown: false
-
-
-
-
-        }),
+        navigationOptions:({navigation}) =>{
+            return {
+                drawerLabel: ()=> null,
+                drawerLockMode:'locked-closed'
+            }
+        }
     },
     Register: {
         screen: Register,
-        navigationOptions: () => ({
-
-            title: null,
-            headerBackTitle: null,
-            headerShown: false
-
-
-
-
-        }),
+        navigationOptions:({navigation}) =>{
+            return {
+                drawerLabel: ()=> null,
+                drawerLockMode:'locked-closed'
+            }
+        }
     },
 
 
     Dashboard: {
         screen: Dashboard,
-        navigationOptions: () => ({
-            title: 'Dashbaord',
-            headerTitleStyle:{
-                color:'white'
-            },
-            headerBackTitle: null,
-            headerStyle: {
-                backgroundColor: '#007bff',
-                
-            },
+        navigationOptions: ({navigation}) => {
 
-            headerLeft:(
-                <Button transparent>
-                    <Icon name='menu' style={{color:'#fff'}} />
-                </Button>
-            )
+            return {
+                title: 'Dashbaord',
+                headerTitleStyle:{
+                    color:'white'
+                },
+                headerBackTitle: null,
+                headerStyle: {
+                    backgroundColor: '#007bff',
+                    
+                },
+
+                headerLeft:(
+                    <Button transparent>
+                        <Icon name='menu' style={{color:'#fff'}} />
+                    </Button>
+                )
+
+            }
+            
 
 
-        }),
+        },
     },
 
    
@@ -165,6 +172,39 @@ const screens = {
 
 
 }
-const HomeStack = createStackNavigator(screens);
+const CustomDrawerContentComponent = props =>(
+    <Container>
+        <Header style={{height:200,backgroundColor:'#fff'}}>
+            <Body>
+                <Image style={styles.drawerImage} source = {require('../assets/icon.png')}/>
+            </Body>
+            
+        </Header>
+        <Content>
+            <DrawerItems {...props} />
+        </Content>
+    </Container>
+)
+
+const settings = 
+{
+        
+}
+const HomeStack = createDrawerNavigator(screens,{
+    contentComponent:CustomDrawerContentComponent,
+    initialRouteName:'Splash',
+    drawerOpenRoute:'DrawerOpen',
+    drawerCloseRoute:'DrawerClose',
+    drawerToggleRoute:'DrawerToggle'
+});
 
 const Navigator = createAppContainer(HomeStack);
+
+const styles = StyleSheet.create({
+    
+    drawerImage:{
+        height:30,
+        width:150,
+        borderRadius:75
+    }
+  });

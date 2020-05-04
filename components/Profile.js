@@ -23,6 +23,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import FooterScreen from './Footer';
+import HeaderScreen from './Header';
 import ProfileModal from './ProfileModal';
 import BankProfileModal from './BankProfileModal';
 import EmploymentProfileModal from './EmploymentProfileModal';
@@ -33,6 +34,7 @@ class Profile extends Component{
         super()
 
         this.state = {
+           title:'Profile',
            userInfo:[],
            employmentInfo:[],
            nextOfKinInfo:[],
@@ -76,6 +78,7 @@ class Profile extends Component{
                                 
             return response.json();      
         })
+        
         .then((contents)=>{
 
           
@@ -115,7 +118,7 @@ class Profile extends Component{
             buttonText:'Okay',
             style:{backgroundColor:'red'}
             
-        })
+        });
     }
 
     userModal = (status) =>{
@@ -174,6 +177,7 @@ class Profile extends Component{
             :
             <Root>
                 <Container>
+                    <HeaderScreen navigation={this.props.navigation} title={this.state.title}/>
                     <Content scrollEnabled={true}>
                         <ProfileModal
                         maritalStatus ={this.state.maritalStatus}

@@ -22,6 +22,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {saveUserDetailsAction} from '../redux/actions';
 import FooterScreen from './Footer';
+import HeaderScreen from './Header';
 class Dashboard extends Component{
     
     constructor(){
@@ -29,6 +30,7 @@ class Dashboard extends Component{
 
         this.state = {
             username:'',
+            title:'Dashboard'
            
           
         }
@@ -42,6 +44,33 @@ class Dashboard extends Component{
         this.setState({
             username:user.fullname,
             email:user.email,
+        })
+
+        fetch(apiUrl+'dashboard',{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'token':token,
+                'Authorization':'Bearer '+user.token
+            },
+            body: JSON.stringify({
+                
+            })
+            
+        })
+        .then(response => {
+                                
+            return response.json();      
+        })
+        
+        .then((contents)=>{
+            
+            console.log(contents);
+            
+        })
+        .catch((error)=>{
+            
+            this.errorInConnection();
         })
 
     }
@@ -66,7 +95,9 @@ class Dashboard extends Component{
         
 
         return ( 
+
             <Container>
+                <HeaderScreen navigation={this.props.navigation} title={this.state.title}/>
                 <Content>
                     <View style={{marginLeft:10, marginRight:10}}>
                         <Text style={{fontSize:18,fontWeight:'bold',marginTop:10,color:'#00CCFF'}}>Hello {this.state.username}</Text>
