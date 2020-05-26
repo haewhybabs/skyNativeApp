@@ -1,4 +1,4 @@
-import { DrawerNavigator } from 'react-navigation';
+import { DrawerNavigator,createAppContainer } from 'react-navigation';
 import Dashboard from './Dashboard';
 
 const MyDrawerNavigator = new DrawerNavigator({
@@ -10,4 +10,7 @@ const MyDrawerNavigator = new DrawerNavigator({
         activeBackgroundColor: '#6b52ae',
     },
 });
+
+const MyApp = createAppContainer(MyDrawerNavigator);
+
 export default MyDrawerNavigator;

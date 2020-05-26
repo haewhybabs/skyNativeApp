@@ -10,8 +10,7 @@ import {  Container,Header,Body,CheckBox,Title,Card,
     Picker} from 'native-base';
     import Login from './Login';
 
-    import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
+  
 
 class SideBar extends Component{
     

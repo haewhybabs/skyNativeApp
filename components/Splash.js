@@ -10,8 +10,7 @@ import {  Container,Header,Body,CheckBox,Title,Card,
     Picker} from 'native-base';
     import Login from './Login';
 
-    import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
+    
 
 class Splash extends Component{
     
@@ -28,13 +27,8 @@ class Splash extends Component{
        
     }
 
-    async componentDidMount() {
-        await Font.loadAsync({
-        'Roboto': require('native-base/Fonts/Roboto.ttf'),
-        'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-        ...Ionicons.font,
-        })
-        this.setState({ loading: false })
+    componentDidMount() {
+       
         setTimeout( () => {
             this.setTimePassed();
         },2000);
@@ -53,11 +47,11 @@ class Splash extends Component{
 
         if (!this.state.timePassed) {
             return (  
-                <Container style={{backgroundColor:'#007bff'}}>
+                <Container style={{backgroundColor:'#fff'}}>
                     <Body>
                         <Image
-                            source={require('../assets/img/splash.png')}
-                            style={{width:300,height:50,marginTop:300}}
+                            source={require('../assets/skyloan-logo.jpg')}
+                            style={{width:300,height:100,marginTop:300}}
                         />
 
                         
@@ -67,7 +61,7 @@ class Splash extends Component{
             );
 
         } else {
-            return <Login route={this.props.navigation.navigate}/>;
+            return <Login navigation={this.props.navigation}/>;
         }
 
         

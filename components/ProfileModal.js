@@ -20,7 +20,7 @@ import{
 } from 'native-base';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {materialIcons, MaterialIcons} from '@expo/vector-icons';
+import {materialIcons, MaterialIcons} from 'react-native-vector-icons';
 import FooterScreen from './Footer';
 import {apiUrl,token,vendorImage} from '../Config';
 
@@ -254,12 +254,9 @@ class ProfileModal extends Component{
 
                         <ScrollView>
                             <View>                                        
-                                <MaterialIcons
-                                    name='close'
-                                    size={24}
-                                    style={styles.modalToggle}
-                                    onPress={()=>this.props.userModal(false)}
-                                /> 
+                            <TouchableOpacity onPress={()=>this.props.userModal(false)} style={{alignItems:'center', marginTop:10,marginBottom:10}}>
+                                <Icon name="close" style={{color:'#e83e8c'}} />  
+                            </TouchableOpacity> 
                             </View>
                             <View style={{alignItems:'center'}}>
                                 <Text style={{fontWeight:'bold'}}>User Information Details</Text>
@@ -277,7 +274,7 @@ class ProfileModal extends Component{
                                     <Input  onChangeText={(phone_number) => this.setState({phone_number})} value={this.state.phone_number}/>
                                 </Item>
 
-                                <Item floatingLabel>
+                                <Item floatingLabel last>
                                     <Label>Address</Label>
                                     <Input  onChangeText={(address) => this.setState({address})} value={this.state.address}/>
                                 </Item>
@@ -314,12 +311,7 @@ class ProfileModal extends Component{
                                         onValueChange={this.onValueUserSexChange.bind(this)}
                                         >
 
-                                        {this.state.userSex !='' ?
-                                            <Picker.Item label={this.state.userSexName} value={this.state.userSex}/>
-
-                                            :null
-                                    
-                                        }
+                                        <Picker.Item label="Sex"  value=""/>
 
                                         {this.props.sex.map((row, index) => (
                                             <Picker.Item label={row.name} value={row.idsex} key={row.idsex} />
@@ -339,12 +331,7 @@ class ProfileModal extends Component{
                                         onValueChange={this.onValueUserMaritalStatusChange.bind(this)}
                                         >
 
-                                        {this.state.userMaritalStatus !='' ?
-                                            <Picker.Item label={this.state.userMaritalStatusName} value={this.state.userMaritalStatus}/>
-
-                                            :null
-                                    
-                                        }
+                                        <Picker.Item label="Marital Status"  value=""/>
 
                                         {this.props.maritalStatus.map((row, index) => (
                                             <Picker.Item label={row.name} value={row.idmaritalstatus} key={row.idmaritalstatus} />
@@ -353,7 +340,7 @@ class ProfileModal extends Component{
                                 </Item>
 
 
-                                <Label style={{marginLeft:10}}>Select State</Label>
+                               
                                 <Item picker>
                                     <Picker
                                         mode="dropdown"
@@ -365,12 +352,7 @@ class ProfileModal extends Component{
                                         onValueChange={this.onValueUserStateChange.bind(this)}
                                         >
 
-                                        {this.state.userState !='' ?
-                                            <Picker.Item label={this.state.userStateName} value={this.state.userState}/>
-
-                                            :null
-                                    
-                                        }
+                                        <Picker.Item label="Select State"  value=""/>
 
                                         {this.props.states.map((row, index) => (
                                             <Picker.Item label={row.names} value={row.idstates} key={row.idstates} />

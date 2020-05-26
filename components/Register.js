@@ -15,8 +15,6 @@ import{
     Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root
 } from 'native-base';
 import {apiUrl,token,vendorImage} from '../Config';
-import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {saveUserDetailsAction} from '../redux/actions';
@@ -27,31 +25,22 @@ class Register extends Component{
         super()
 
         this.state = {
+
             email:'',
             password:'',
-            password_confirmation:'',
+            passwordConfirmation:'',
             fullname:'',
-            address:'',
-            phone_number:'',
-            isLoading:false,
-            validationError:[],
-            timeout:false
-           
-          
+            phoneNumber:'',
+            isLoading:true,
+            
         }
+  
        
     }
-
     componentDidMount(){
-        
-        setTimeout( () => {
-                
-            this.setState({timeout: true});
-        },2000);
-    }
-    loginHandler =() =>{
-        
-        this.props.navigation.navigate('Login');
+        this.setState({
+            isLoading:false
+        })
     }
 
     showLoader = () => {
@@ -62,176 +51,106 @@ class Register extends Component{
         this.setState({isLoading:false})
     }
 
-    gotoDashboard = () =>{
-        this.props.navigation('Dashboard');
+
+    loginHandler = () => {
+
+        this.props.navigation.navigate('Login');
     }
 
     errorInConnection = () => {
         this.hideLoader();
 
         Toast.show({
-            text:'Ops!! Network Connection Problem',
+            text:'Ops!! Connection Problem',
             buttonText:'Okay',
             style:{backgroundColor:'red'}
             
         })
     }
 
-    validateInput = (input) =>{
-
-        var value = this.state;
-
-        var validate = false;
-        var count = 0;
-
+    submitValidation = () =>{
         
+        let state = this.state;
+        let nameError = state.nameError;
+        let emailError= state.emailError;
+        let phoneNumberError = state.phoneNumberError;
+        let passwordError =state.passwordError;
+        let passwordConfirmationError=state.passwordConfirmationError
 
-        var validationError = []
-
-        for (let i=0; i<input.length; i++){
-            if(input[i].value==''){
-                validationError.push(
-                    input[i].name
-                );
-            }
-            else{
-                count = count +1;
-            }
+        if(state.email == ""){
+            emailError = 'Email cannot be empty';
+        }
+        if(state.fullname ==""){
+            nameError='Name Field cannot be empty';
+        }
+        if(state.password==""){
+            passwordError= "Password Field cannot be empty";
+        }
+        if(state.passwordConfirmation==""){
+            passwordConfirmationError="Password confirmation field cannot be empty";
+        }
+        if(state.phoneNumber==""){
+            phoneNumberError="Phone number field cannot be empty";
         }
 
         this.setState({
-            validationError
+            nameError,
+            passwordError,
+            passwordConfirmationError,
+            emailError,
+            phoneNumberError
         });
-        return count;
     }
 
-    showError = (value) =>{
-        var error = this.state.validationError;
-        if(error.some(item=>value===item)){
-            
-            return(
-                this.state.timeout==false ?
-                    <Text style={{color:'red'}}>{value} is required</Text>
-                :
-                null
-            );
-        }
-    }
-
-    closeErrorMessage = () =>{
-        this.setState({
-            timeout:false
-        });
-        this.componentDidMount();
-    }
-
-
-    registerHandler = () => {
-        Keyboard.dismiss();
-        this.showLoader();
-        var value=this.state;
+    registerHandler = () =>
+    {
+        this.submitValidation();
         
-        
-        
+        let state = this.state
+        if(this.state.emailError=="" && this.state.nameError =="" && this.state.phoneNumberError=="" && this.state.passwordError=="" && this.state.passwordConfirmationError==""){
+            this.showLoader();
+            fetch(apiUrl+'register',{
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json','token':token
 
-        var input =[
-            {
-                value:value.email,
-                name:'email',
-            
-            },
-            {
-                value:value.password,
-                name:'password',
-            },
-            {
-                value:value.password_confirmation,
-                name:'password confirmation',
-            },
-            {
-                value:value.address,
-                name:'address',
+                },
+                body: JSON.stringify({
+                    fullname:state.fullname,
+                    email: state.email,
+                    password: state.password,
+                    password_confirmation:state.passwordConfirmation,
+                    phone_number:state.phoneNumber
+                })
                 
-            },
-            {
-                value:value.phone_number,
-                name:'phone number',
-            },
-            {
-                value:value.fullname,
-                name:'full name'
-            }
-        
-        ]
-        var count = this.validateInput(input);
-
-        if(count<input.length){
-            this.closeErrorMessage();
-        }
-        
-        if (count==input.length){
-
-            let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-            if (reg.test(value.email) === false) {
+            })
+            .then(response => {
+                 
+                                
+                return response.json();   
+                  
+            })
+            .then((contents)=>{
                 this.hideLoader();
                 
-                Toast.show({
-                    text:'Invalid Email',
-                    buttonText:'Okay',
-                    style:{backgroundColor:'red'}
-                   
-                })
-            }
-            else {
-                
-                fetch(apiUrl+'register',{
-                    method:"POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'token':token,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        fullname:value.fullname,
-                        email: value.email,
-                        password: value.password,
-                        password_confirmation:value.password_confirmation,
-                        address:value.address,
-                        phone_number:value.phone_number
-                    })
+                if(contents.errors){
                     
-                })
-                .then(response => {
-                     
-                                    
-                    return response.json();   
-                      
-                })
-                .then((contents)=>{
-                    
-                    if(contents.errors){
-                        var errors=contents.errors;
-                        var message = contents.message;
-
-                        // console.log(contents.errors)
-
-                       
-                        this.hideLoader();
-
+                    Toast.show({
+                        text:contents.message,
+                        buttonText:'Okay',
+                        style:{backgroundColor:'red'}
                         
-                        Toast.show({
-                            text:message,
-                            buttonText:'Okay',
-                            style:{backgroundColor:'red'}
-                           
-                        })
-
+                    })  
+                }
+                else{
+                    Toast.show({
+                        text:'Success!!!!',
+                        buttonText:'Okay',
+                        style:{backgroundColor:'green'},
+                        duration:3000
                         
-                    }
-                    else{
-
-                        AsyncStorage.setItem('userDetails',
+                    })  
+                    AsyncStorage.setItem('userDetails',
                         JSON.stringify({
                             fullname:contents.fullname,
                             email:contents.email,
@@ -250,33 +169,99 @@ class Register extends Component{
                         });
                         this.props.navigation.navigate('Dashboard');
 
-                        
-                        
-                    }
+                }
+            })
+            .catch((error)=>{
+                this.errorInConnection();
+                this.setState({
+                    password_confirmation:'',
+                    password:''
                 })
-                .catch((error)=>{
-                    this.errorInConnection();
-                    
-                    this.setState({
-                        password_confirmation:'',
-                        password:''
-                    })
-
-                    
-                })
-              
-            }
-            
-                
-
+            })
+        
         }
-
-        else{
-            this.hideLoader();
-        }
-
+        
     }
 
+    validateName = (fullname) => {
+        if(fullname == ""){
+            this.setState({
+                nameError:'Name field cannot be empty'
+            })
+        }
+        else{
+            this.setState({
+                nameError:'',
+                fullname
+            })
+        }
+        
+    }
+
+    validateMail = (email) => {
+
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+            if (reg.test(email) === false || email=="") 
+            {
+                
+                this.setState({
+
+                    emailError:'Email is not yet valid'
+                })
+            }
+            else{
+                this.setState({
+                    emailError:'',
+                    email
+                })
+            }
+    }
+
+    passwordValidation = (password) =>
+    {
+        if(password.length<=6 || password ==""){
+            this.setState({
+
+                passwordError:'Password must be greater than 6'
+            })
+        }
+        else{
+            this.setState({
+                password,
+                passwordError:''
+            })
+        }
+        
+    }
+
+    passwordConfirmationValidation = (passwordConfirmation) =>{
+        if(this.state.password != passwordConfirmation){
+            this.setState({
+                passwordConfirmationError:'Password does not match',
+            })
+        }
+        else{
+            this.setState({
+                passwordConfirmation,
+                passwordConfirmationError:''
+            })
+        }
+    }
+    phoneNumberValidation =(phoneNumber) =>
+    {
+        if(phoneNumber == ""){
+            this.setState({
+                phoneNumberError:'Phone Number Field cannot be empty'
+            });
+        }
+        else{
+            this.setState({
+                phoneNumber,
+                phoneNumberError:''
+            });
+        }
+    }
     
     render(){
 
@@ -298,68 +283,57 @@ class Register extends Component{
                 <Root>
                     <Container>
                         <Content padder>
-                            
-                                
                             <View>
-                                
-
                                 <Text style={{marginTop:50, color:'#00CCFF', fontSize:30,alignSelf:'flex-start', marginLeft:5,fontWeight:'bold'}}>Welcome,</Text>
-                                    
-                        
-                                
                                 <Text style={{color:'black',fontWeight:'bold',alignSelf:'flex-start',marginLeft:5,fontSize:20}}>Register to continue</Text>
                             </View>    
                                 
-                                <Form>     
-                                    <Item floatingLabel>
-                                        <Label>Full Name</Label>
-                                        <Input onChangeText={(fullname) => this.setState({fullname})} value={this.state.fullname}/>
-                                    </Item>
-                                    {this.showError('full name')}
-                                    <Item floatingLabel>
-                                        <Label>Email</Label>
-                                        <Input onChangeText={(email) => this.setState({email})} value={this.state.email}/>
-                                    </Item>
-                                    {this.showError('email')}
-                                    <Item floatingLabel last>
-                                        <Label>Password</Label>
-                                        <Input secureTextEntry onChangeText={(password) => this.setState({password})}/>
-                                    </Item>
-                                    {this.showError('password')}
-                                    <Item floatingLabel last>
-                                        <Label>Password Confirmation</Label>
-                                        <Input secureTextEntry onChangeText={(password_confirmation) => this.setState({password_confirmation})}/>
-                                    </Item>
-                                    {this.showError('password confirmation')}
-                                    <Item floatingLabel>
-                                        <Label>Address</Label>
-                                        <Input onChangeText={(address) => this.setState({address})} value={this.state.address}/>
-                                    </Item>
-                                    {this.showError('address')}
-                                    <Item floatingLabel>
-                                        <Label>Mobile Number</Label>
-                                        <Input onChangeText={(phone_number) => this.setState({phone_number})} value={this.state.phone_number}/>
-                                    </Item>
-                                    {this.showError('phone number')}
-                                    
-                                    <View style={{marginTop:50}}>
-                                        <Button rounded primary onPress={this.registerHandler} style={{width:'100%'}}>
-                                            <Text style={{width: '100%',textAlign: 'center',color:'#fff',fontSize:20}}>Register</Text>
-                                        </Button>
-                                    </View>
-                                    <View>
-                                        <Row>
-                                            <Text style={{marginLeft:10, marginTop:10}}>Already have an account?</Text>
-                                            <TouchableOpacity onPress={this.loginHandler} >
-                                                <Text style={{marginLeft:10, marginTop:10,color:'#e83e8c'}}>Sign In</Text>
-                                            </TouchableOpacity>
-                                        </Row>
-                                    </View>
-                                </Form>
+                            <Form>     
+                                <Item inlineLabel last>
+                                    <Label>Full Name</Label>
+                                    <Input  onChangeText={(fullname)=>this.validateName(fullname)}/>
+                                </Item>
+                                <Text style={{color:'red'}}>{this.state.nameError}</Text>
+                                <Item inlineLabel last>
+                                    <Label>Email</Label>
+                                    <Input  onChangeText={(email)=>this.validateMail(email)} />
+                                </Item>
+                                <Text style={{color:'red'}}>{this.state.emailError}</Text>
+                                <Item inlineLabel last>
+                                    <Label>Password</Label>
+                                    <Input secureTextEntry onChangeText={(password)=>this.passwordValidation(password)} />
+                                </Item>
+                                <Text style={{color:'red'}}>{this.state.passwordError}</Text>
+                                <Item inlineLabel last>
+                                    <Label>Password Confirmation</Label>
+                                    <Input secureTextEntry onChangeText={(passwordConfirmation)=>this.passwordConfirmationValidation(passwordConfirmation)} />
+                                </Item>
+                                <Text style={{color:'red'}}>{this.state.passwordConfirmationError}</Text>
+                                <Item inlineLabel last>
+                                    <Label>Phone Number</Label>
+                                    <Input keyboardType='numeric' onChangeText={(phoneNumber)=>this.phoneNumberValidation(phoneNumber)}/>
+                                </Item>
+                                <Text style={{color:'red'}}>{this.state.phoneNumberError}</Text>
+                                
+                                <View style={{marginTop:50}}>
+                                    <Button rounded primary onPress={this.registerHandler} style={{width:'100%'}}>
+                                        <Text style={{width: '100%',textAlign: 'center',color:'#fff',fontSize:20}}>Register</Text>
+                                    </Button>
+                                </View>
+                                
+                            </Form>
                         
-                            
-                            
                         </Content>
+
+                        <View style={{position:'absolute',bottom:0,alignItems:'center',width:'100%',marginBottom:10}}>
+                            <Row>
+                                <Text style={{marginLeft:10, marginTop:10,color:'black'}}>Already have an account?</Text>
+                                <TouchableOpacity onPress={this.loginHandler} >
+                                    <Text style={{marginLeft:10, marginTop:10,color:'#e83e8c'}}>Login here</Text>
+                                </TouchableOpacity>
+                            </Row>
+                        </View>
+
                     </Container>
                 </Root>
             

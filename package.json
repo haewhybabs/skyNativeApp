@@ -1,30 +1,27 @@
 {
-    "main": "node_modules/expo/AppEntry.js",
+    "name": "skyloanApp",
+    "version": "0.0.1",
+    "private": true,
     "scripts": {
-        "start": "expo start",
-        "android": "expo start --android",
-        "ios": "expo start --ios",
-        "web": "expo start --web",
-        "eject": "expo eject"
+        "android": "react-native run-android",
+        "ios": "react-native run-ios",
+        "start": "react-native start",
+        "test": "jest",
+        "lint": "eslint ."
     },
     "dependencies": {
-        "@expo/vector-icons": "^10.0.6",
         "@react-native-community/masked-view": "^0.1.7",
-        "expo": "~36.0.0",
-        "expo-font": "~8.0.0",
-        "fontisto": "^3.0.4",
         "native-base": "^2.10.0",
-        "react": "~16.9.0",
+        "react": "16.11.0",
         "react-dom": "~16.9.0",
-        "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+        "react-native": "0.62.2",
         "react-native-gesture-handler": "~1.5.0",
-        "react-native-group-checkbox": "^1.0.3",
-        "react-native-input-spinner": "^1.2.10",
-        "react-native-numeric-input": "^1.8.3",
+        "react-native-image-picker": "^2.3.1",
         "react-native-rave": "^2.2.5",
         "react-native-reanimated": "~1.4.0",
         "react-native-safe-area-context": "^0.7.3",
         "react-native-screens": "^2.0.0-alpha.12",
+        "react-native-vector-icons": "^6.6.0",
         "react-native-web": "~0.11.7",
         "react-navigation": "^4.2.2",
         "react-navigation-drawer": "^2.4.13",
@@ -33,8 +30,16 @@
         "redux": "^4.0.5"
     },
     "devDependencies": {
-        "@babel/core": "^7.0.0",
-        "babel-preset-expo": "~8.0.0"
+        "@babel/core": "7.9.6",
+        "@babel/runtime": "7.9.6",
+        "@react-native-community/eslint-config": "0.0.5",
+        "babel-jest": "24.9.0",
+        "eslint": "6.8.0",
+        "jest": "24.9.0",
+        "metro-react-native-babel-preset": "0.58.0",
+        "react-test-renderer": "16.11.0"
     },
-    "private": true
+    "jest": {
+        "preset": "react-native"
+    }
 }

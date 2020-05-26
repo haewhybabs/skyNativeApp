@@ -15,6 +15,8 @@ import Profile from './Profile';
 import Register from './Register';
 import Loans from './Loans';
 import History from './History';
+import ContactUs from './ContactUs';
+import AuthLoadingScreen from './AuthLoadingScreen';
 
 import{
     
@@ -40,8 +42,8 @@ class Route extends Component {
 
     render() {
 
-        return ( <
-            Navigator / >
+        return ( 
+            <Navigator/>
         );
     }
 }
@@ -51,9 +53,96 @@ export default Route;
 
 
 
-const screens = {
+const AppScreens = {
 
 
+    Dashboard: {
+        screen: Dashboard,
+        navigationOptions: ({navigation}) => {
+
+            return {
+                title: 'Dashboard',
+                headerTitleStyle:{
+                    color:'white'
+                },
+            
+
+            }
+            
+
+
+        },
+    },
+
+   
+
+    Profile: {
+        screen: Profile,
+        navigationOptions: () => ({
+            title: 'Profile',
+            
+            // headerStyle: {
+            //     backgroundColor: '#007bff',
+                
+            // },
+            // headerTitleStyle:{
+            //     color:'white'
+            // },
+
+
+        }),
+    },
+
+    Loans: {
+        screen: Loans,
+        navigationOptions: () => ({
+            title: 'Request For Loan',
+            
+
+
+        }),
+    },
+
+    History: {
+        screen: History,
+        navigationOptions: () => ({
+            title: 'Loan History',
+            headerBackTitle: null,
+            headerStyle: {
+                backgroundColor: '#007bff',
+                
+            },
+            headerTitleStyle:{
+                color:'white'
+            },
+
+
+        }),
+    },
+
+    ContactUs: {
+        screen: ContactUs,
+        navigationOptions: () => ({
+            title: 'Contact us',
+            headerBackTitle: null,
+            headerStyle: {
+                backgroundColor: '#007bff',
+                
+            },
+            headerTitleStyle:{
+                color:'white'
+            },
+
+
+        }),
+    },
+
+
+
+}
+
+const AuthScreens = 
+{
     Splash: {
         screen: Splash,
         header: null,
@@ -85,98 +174,14 @@ const screens = {
             }
         }
     },
-
-
-    Dashboard: {
-        screen: Dashboard,
-        navigationOptions: ({navigation}) => {
-
-            return {
-                title: 'Dashbaord',
-                headerTitleStyle:{
-                    color:'white'
-                },
-                headerBackTitle: null,
-                headerStyle: {
-                    backgroundColor: '#007bff',
-                    
-                },
-
-                headerLeft:(
-                    <Button transparent>
-                        <Icon name='menu' style={{color:'#fff'}} />
-                    </Button>
-                )
-
-            }
-            
-
-
-        },
-    },
-
-   
-
-    Profile: {
-        screen: Profile,
-        navigationOptions: () => ({
-            title: 'Profile',
-            headerBackTitle: null,
-            headerStyle: {
-                backgroundColor: '#007bff',
-                
-            },
-            headerTitleStyle:{
-                color:'white'
-            },
-
-
-        }),
-    },
-
-    Loans: {
-        screen: Loans,
-        navigationOptions: () => ({
-            title: 'Request For Loan',
-            headerBackTitle: null,
-            headerStyle: {
-                backgroundColor: '#007bff',
-                
-            },
-
-            headerTitleStyle:{
-                color:'white'
-            },
-
-
-        }),
-    },
-
-    History: {
-        screen: History,
-        navigationOptions: () => ({
-            title: 'Loan History',
-            headerBackTitle: null,
-            headerStyle: {
-                backgroundColor: '#007bff',
-                
-            },
-            headerTitleStyle:{
-                color:'white'
-            },
-
-
-        }),
-    },
-
-
-
 }
+
+
 const CustomDrawerContentComponent = props =>(
     <Container>
         <Header style={{height:200,backgroundColor:'#fff'}}>
             <Body>
-                <Image style={styles.drawerImage} source = {require('../assets/icon.png')}/>
+                <Image style={styles.drawerImage} source = {require('../assets/skyloan-logo.jpg')}/>
             </Body>
             
         </Header>
@@ -186,24 +191,32 @@ const CustomDrawerContentComponent = props =>(
     </Container>
 )
 
-const settings = 
-{
-        
-}
-const HomeStack = createDrawerNavigator(screens,{
+
+const AccountNavigator = createDrawerNavigator(AppScreens,{
     contentComponent:CustomDrawerContentComponent,
-    initialRouteName:'Splash',
+    initialRouteName:'Dashboard',
     drawerOpenRoute:'DrawerOpen',
     drawerCloseRoute:'DrawerClose',
     drawerToggleRoute:'DrawerToggle'
 });
 
-const Navigator = createAppContainer(HomeStack);
+const AuthNavigator = createDrawerNavigator(AuthScreens,{
+    initialRouteName:'Dashboard',
+    headerMode:"none"
+});
+
+const AppNavigator = createDrawerNavigator({
+    Auth:AuthNavigator,
+    App:AccountNavigator,
+    AuthLoadingScreen:AuthLoadingScreen
+});
+
+const Navigator = createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
     
     drawerImage:{
-        height:30,
+        height:70,
         width:150,
         borderRadius:75
     }

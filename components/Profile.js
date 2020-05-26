@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   Text,
-  Modal
+  Modal,StatusBar,Platform,BackHandler
    } from 'react-native';
 
 import{
@@ -17,8 +17,7 @@ import{
     Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root,Thumbnail,Picker
 } from 'native-base';
 import {apiUrl,token,vendorImage} from '../Config';
-import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
+
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -28,10 +27,26 @@ import ProfileModal from './ProfileModal';
 import BankProfileModal from './BankProfileModal';
 import EmploymentProfileModal from './EmploymentProfileModal';
 import NextOfKinProfileModal from './NextOfKinProfileModal';
+import ImagePicker from 'react-native-image-picker';
+
+const MyStatusBar = ({backgroundColor, ...props}) => (
+    <View style={[styles.statusBar, { backgroundColor }]}>
+        <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+    );
+const options = {
+    title:'Select a photo',
+    takePhotoButtonTitle:'Take a photo',
+    chooseFromLibraryButtonTitle:'Choose from gallery',
+    quality:1
+}
+
+
 class Profile extends Component{
     
     constructor(){
         super()
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
         this.state = {
            title:'Profile',
@@ -54,6 +69,9 @@ class Profile extends Component{
            bankOpen:false,
            employmentOpen:false,
            nextOfKinOpen:false,
+           imageSource:"",
+            imageData:null,
+            image:null,
           
         }
        
@@ -100,6 +118,7 @@ class Profile extends Component{
                 maritalStatus:contents.marital_status,
                 status:contents.status,
                 isLoading:false,
+                image:contents.userInfo.image
 
             });
         })
@@ -161,6 +180,83 @@ class Profile extends Component{
         this.componentDidMount();
     }
 
+    selectPhoto = async() =>
+    {
+        ImagePicker.showImagePicker({noData:true,mediaType:'photo'}, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } 
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }else {
+                let source ={uri:response.uri}
+                this.showLoader()
+                this.uploadImage(response)
+              
+                
+            }
+        });
+    }
+
+    uploadImage = async (response) =>{
+        
+        const baseUrl = apiUrl +'image-upload';
+        const uploadData = new FormData();
+        uploadData.append('image',{type:response.type, uri:response.uri,name:response.fileName})
+        fetch(baseUrl, {
+            method:'post',
+            headers: {
+                Authorization:this.props.user.token,  
+            },
+            body:uploadData
+            
+        })
+        .then(response => {
+            return response.json();
+        })   
+        .then((contents)=>{
+
+            console.log('Response :' + contents)
+            
+            this.hideLoader()
+            
+            this.setState({
+
+                image:contents.url
+
+            });
+
+            Toast.show({
+                text:'success!!!',
+                buttonText:'Okay',
+                style:{backgroundColor:'green'}
+                
+            })
+        })
+        .catch((error)=>{ 
+            this.errorInConnection();
+        })
+    }
+
+    componentWillMount() {
+        
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        
+        this.props.navigation.navigate('Dashboard')
+        
+        return true;
+    }
+
     render(){
 
     
@@ -176,9 +272,10 @@ class Profile extends Component{
             </View>
             :
             <Root>
-                <Container>
-                    <HeaderScreen navigation={this.props.navigation} title={this.state.title}/>
-                    <Content scrollEnabled={true}>
+
+                <Container style={{backgroundColor:'#fff'}}>
+                    
+                    <Content>
                         <ProfileModal
                         maritalStatus ={this.state.maritalStatus}
                         sex ={this.state.sex}
@@ -189,12 +286,10 @@ class Profile extends Component{
                         states= {this.state.states}
                         lgs = {this.state.lgs}
                         user = {this.props.user}
-
                         showLoader={this.showLoader}
                         hideLoader = {this.hideLoader}
                         refresh = {this.refresh}
-                        bankOpen={this.state.bankOpen}
-                        
+                        bankOpen={this.state.bankOpen}   
                         />
 
                         <BankProfileModal
@@ -235,19 +330,29 @@ class Profile extends Component{
                         refresh = {this.refresh}    
                         />
 
+                        <View style={{backgroundColor:'#007bff',width:'100%',height:220}}>
+                    
+                            <Button transparent onPress={()=>this.props.navigation.openDrawer()}>
+                                <Icon name='menu' style={{color:'#fff'}}/>
+                            </Button>
+                        
+                            <View style={{width:'100%',alignItems:'center',marginTop:20}}>
+                                <Thumbnail
+                                    source = {this.state.image != null ? {uri:this.state.image}:
+                                        require('../assets/noImage.png')}
+                                    scaleX={2} scaleY={2}
+                                    style={{width:50, height:50, borderRadius:50/2}}      
+                                />
+                                <TouchableOpacity onPress={()=>this.selectPhoto()}>
+                                    <Text style={{marginTop:40,color:'#fff',fontSize:20}}>Change Profile Picture</Text>
+                                </TouchableOpacity>
 
-                        <Body>
-                            <Icon active name="person" style={{color:'#e83e8c'}}/>
-
-                            <Text style={{fontWeight:'bold'}}>{this.state.userInfo.fullname}</Text>
-
-                            <Text style={{marginTop:3}}>{this.state.userInfo.phone_number}</Text>
-
-                            <Text style={{marginTop:3}}>{this.state.userInfo.address}</Text>
-                            <Text style={{marginTop:3,fontWeight:'bold'}}>Complete Profile: {this.state.percentage}%</Text>    
-                        </Body>
-                        <View style={{borderBottomColor:'#e83e8c',borderBottomWidth:3,alignSelf:'stretch',marginTop:10}}/>
-
+                                <View style={{marginTop:10}}>
+                                    <Text style={{fontWeight:'bold', color:'#e83e8c'}}> {this.state.percentage}% Complete</Text>
+                                </View>
+                            </View>
+                        </View>
+                        
                         <View style={{marginTop:25,alignItems:'center'}}>
                             <Text style={{color:'gray',fontWeight:'bold'}}>Account Information</Text>
                         </View>
@@ -260,7 +365,7 @@ class Profile extends Component{
                                     <Icon active name="person" style={{color:'#00CCFF'}} />
                                     <Text>User Information</Text>
                                     <Right>
-                                        <Icon name="arrow-forward" />
+                                        <Icon name="arrow-forward" style={{color:'#e83e8c'}}/>
                                     </Right>
                                 </CardItem>
                             </Card>
@@ -274,7 +379,7 @@ class Profile extends Component{
                                     <Icon active name="home" style={{color:'#00CCFF'}}/>
                                     <Text>Bank Information</Text>
                                     <Right>
-                                        <Icon name="arrow-forward" />
+                                        <Icon name="arrow-forward" style={{color:'#e83e8c'}} />
                                     </Right>
                                 </CardItem>
                             </Card>
@@ -286,7 +391,7 @@ class Profile extends Component{
                                     <Icon active name="md-document" style={{color:'#00CCFF'}}/>
                                     <Text>Employment Information</Text>
                                     <Right>
-                                        <Icon name="arrow-forward" />
+                                        <Icon name="arrow-forward" style={{color:'#e83e8c'}}/>
                                     </Right>
                                 </CardItem>
                             </Card>
@@ -298,7 +403,7 @@ class Profile extends Component{
                                     <Icon active name="man" style={{color:'#00CCFF'}}/>
                                     <Text>Next Of Kin Information</Text>
                                     <Right>
-                                        <Icon name="arrow-forward" />
+                                        <Icon name="arrow-forward" style={{color:'#e83e8c'}} />
                                     </Right>
                                 </CardItem>
                             </Card>
@@ -313,6 +418,9 @@ class Profile extends Component{
     }
 
 }
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
+const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -331,7 +439,15 @@ const styles = StyleSheet.create({
   line:{
       borderBottomColor:'red',
     borderBottomWidth:1
-  }
+  },
+
+  statusBar: {
+    height: STATUSBAR_HEIGHT,
+  },
+  appBar: {
+    backgroundColor:'#79B45D',
+    height: APPBAR_HEIGHT,
+  },
 });
 
 

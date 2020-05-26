@@ -20,7 +20,7 @@ import{
 } from 'native-base';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {materialIcons, MaterialIcons} from '@expo/vector-icons';
+import {materialIcons, MaterialIcons} from 'react-native-vector-icons';
 import FooterScreen from './Footer';
 import {apiUrl,token,vendorImage} from '../Config';
 
@@ -180,12 +180,9 @@ class NextOfKinProfileModal extends Component{
 
                         <ScrollView>
                             <View>                                        
-                                <MaterialIcons
-                                    name='close'
-                                    size={24}
-                                    style={styles.modalToggle}
-                                    onPress={()=>this.props.nextOfKinModal(false)}
-                                /> 
+                            <TouchableOpacity onPress={()=>this.props.nextOfKinModal(false)} style={{alignItems:'center', marginTop:10,marginBottom:10}}>
+                                <Icon name="close" style={{color:'#e83e8c'}} />  
+                            </TouchableOpacity> 
                             </View>
                             <View style={{alignItems:'center'}}>
                                 <Text style={{fontWeight:'bold'}}>Next of kin Information Details</Text>
@@ -195,7 +192,7 @@ class NextOfKinProfileModal extends Component{
 
                             <Form>
                                 
-                                <Item floatingLabel>
+                                <Item floatingLabel last>
                                     <Label>Full Name</Label>
                                     <Input onChangeText={(fullName) => this.setState({fullName})} value={this.state.fullName}/>
                                 </Item>
@@ -213,7 +210,7 @@ class NextOfKinProfileModal extends Component{
                                     <Input  onChangeText={(relationship) => this.setState({relationship})} value={this.state.relationship}/>
                                 </Item>
 
-                                <Label style={{marginTop:20,marginLeft:10}}>Select State</Label>
+                                
                                 <Item picker>
                                     <Picker
                                         mode="dropdown"
@@ -225,12 +222,7 @@ class NextOfKinProfileModal extends Component{
                                         onValueChange={this.onValueStateChange.bind(this)}
                                         >
 
-                                        {this.state.StateId !='' ?
-                                            <Picker.Item label={this.state.stateName} value={this.state.stateId}/>
-
-                                            :null
-                                    
-                                        }
+                                        <Picker.Item label = "Select State" value = "" />
 
                                         {this.props.states.map((row, index) => (
                                             <Picker.Item label={row.names} value={row.idstates} key={row.idstates} />
@@ -263,7 +255,7 @@ class NextOfKinProfileModal extends Component{
                                 </Item>
 
 
-                                <Item floatingLabel>
+                                <Item floatingLabel last>
                                     <Label>Address</Label>
                                     <Input onChangeText={(address) => this.setState({address})} value={this.state.address}/>
                                 </Item>

@@ -3,7 +3,7 @@ import React,{Component} from 'react';
 import { 
   StyleSheet,
   View,
-
+    BackHandler,
   Text
    } from 'react-native';
 
@@ -22,7 +22,7 @@ class FooterScreen extends Component{
     
     constructor(){
         super()
-
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             dataSource:[],
             isLoading:true,
@@ -46,6 +46,23 @@ class FooterScreen extends Component{
 
     ProfileHandler = () =>{
         this.props.navigation.navigate('Profile');
+    }
+
+    componentWillMount() {
+        
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        
+        this.props.navigation.navigate('Dashboard')
+        
+        return true;
     }
 
     render(){

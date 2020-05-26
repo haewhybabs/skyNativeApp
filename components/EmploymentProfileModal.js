@@ -20,7 +20,7 @@ import{
 } from 'native-base';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {materialIcons, MaterialIcons} from '@expo/vector-icons';
+import {materialIcons, MaterialIcons} from 'react-native-vector-icons';
 import FooterScreen from './Footer';
 import {apiUrl,token,vendorImage} from '../Config';
 
@@ -210,12 +210,9 @@ class EmploymentProfileModal extends Component{
 
                         <ScrollView>
                             <View>                                        
-                                <MaterialIcons
-                                    name='close'
-                                    size={24}
-                                    style={styles.modalToggle}
-                                    onPress={()=>this.props.employmentModal(false)}
-                                /> 
+                            <TouchableOpacity onPress={()=>this.props.employmentModal(false)} style={{alignItems:'center', marginTop:10,marginBottom:10}}>
+                                <Icon name="close" style={{color:'#e83e8c'}} />  
+                            </TouchableOpacity> 
                             </View>
                             <View style={{alignItems:'center'}}>
                                 <Text style={{fontWeight:'bold'}}>Employment Information Details</Text>
@@ -241,7 +238,7 @@ class EmploymentProfileModal extends Component{
                                         selectedValue={this.state.employerStateId}
                                         onValueChange={this.onValueStateChange.bind(this)}
                                         >
-                                        
+                                        <Picker.Item label="Select Employer State"  value=""/>
 
                                         {this.props.states.map((row, index) => (
                                             <Picker.Item label={row.names} value={row.idstates} key={row.idstates} />
@@ -251,6 +248,7 @@ class EmploymentProfileModal extends Component{
 
                                 
                                 <Item picker>
+                                    <Label>Employer Local Government</Label>
                                     <Picker
                                         mode="dropdown"
                                         iosIcon={<Icon name="arrow-down" />}
@@ -298,7 +296,7 @@ class EmploymentProfileModal extends Component{
                                         onValueChange={this.onValueEmploymentChange.bind(this)}
                                         >
                                         
-                                        
+                                        <Picker.Item label="Select Employment Type"  value=""/>
 
                                         {this.props.employmentType.map((row, index) => (
                                             <Picker.Item label={row.employment} value={row.idemploymenttype} key={row.idemploymenttype} />
@@ -318,7 +316,7 @@ class EmploymentProfileModal extends Component{
                                         onValueChange={this.onValueSalaryChange.bind(this)}
                                         >
 
-                                        
+                                        <Picker.Item label="Salary Range"  value=""/>
                                         {this.props.salaryRange.map((row, index) => (
                                             <Picker.Item label={row.salary_range} value={row.idsalaryrange} key={row.idsalaryrange} />
                                         ))}       

@@ -19,7 +19,7 @@ import{
 import {apiUrl,token,vendorImage} from '../Config';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {materialIcons, MaterialIcons} from '@expo/vector-icons';
+
 import FooterScreen from './Footer';
 import HeaderScreen from './Header';
 
@@ -110,13 +110,17 @@ class Loans extends Component{
         }
         if(loanPlanInput != ""){
             let checkFilter = this.state.loanPlans.filter(loanPlans=>loanPlans.idloanrange==loanPlanInput);
-            if(loanAmount > checkFilter[0].maxi_range || loanAmount <checkFilter[0].mini_range ){
+            var maxAmount = parseInt(checkFilter[0].maxi_range,10)
+            var minAmount =parseInt(checkFilter[0].mini_range,10);
+
+            if(loanAmount > maxAmount || loanAmount <minAmount ){
                 error="The amount is invalid for the selected plan";
             }
             else{
                 status=true
             }
         }
+       
         data={
             status,
             error
@@ -147,6 +151,7 @@ class Loans extends Component{
         else{
 
             let validateAmount = this.loanAmountValidation(loanAmount);
+           
             error = validateAmount.error;   
         }
 
@@ -183,55 +188,55 @@ class Loans extends Component{
             this.showLoader();
             const user = this.props.user; 
 
-        fetch(apiUrl+'loan-request',{
-            method:"POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'token':token,
-                'Authorization':'Bearer '+user.token
-            },
-            body: JSON.stringify({
-                amount:state.loanAmount,
-                loan_range_id:state.loanPlanInput,
-                loan_info:state.loanRequestInfo
+            fetch(apiUrl+'loan-request',{
+                method:"POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token':token,
+                    'Authorization':'Bearer '+user.token
+                },
+                body: JSON.stringify({
+                    amount:state.loanAmount,
+                    loan_range_id:state.loanPlanInput,
+                    loan_info:state.loanRequestInfo
+                })
+                
+            })
+            .then(response => {
+                                    
+                return response.json();      
             })
             
-        })
-        .then(response => {
-                                
-            return response.json();      
-        })
-        
-        .then((contents)=>{
-            this.hideLoader();
+            .then((contents)=>{
+                this.hideLoader();
 
-          if(contents.status){
-            Toast.show({
-                text:'Success!! We will get back to you soon',
-                buttonText:'Okay',
-                style:{backgroundColor:'green'},
-                duration:3000       
-            })
-            setTimeout( () => {
-                this.props.navigation.navigate('History');
-            },3000);
-              
-          }
-          else{
-            Toast.show({
-                text:'Error!! '+contents.message,
-                buttonText:'Okay',
-                style:{backgroundColor:'red'},
-                duration:4000       
-            })
-          }
+            if(contents.status){
+                Toast.show({
+                    text:'Success!! We will get back to you soon',
+                    buttonText:'Okay',
+                    style:{backgroundColor:'green'},
+                    duration:3000       
+                })
+                setTimeout( () => {
+                    this.props.navigation.navigate('History');
+                },3000);
+                
+            }
+            else{
+                Toast.show({
+                    text:'Error!! '+contents.message,
+                    buttonText:'Okay',
+                    style:{backgroundColor:'red'},
+                    duration:4000       
+                })
+            }
 
-            
-        })
-        .catch((error)=>{
-            
-            this.errorInConnection();
-        })
+                
+            })
+            .catch((error)=>{
+                
+                this.errorInConnection();
+            })
         }
     }
 

@@ -15,16 +15,12 @@ import{
     Col,Button,Icon, Subtitle,Form, Item, Input,Label,Row,Toast,Root
 } from 'native-base';
 import {apiUrl,token,vendorImage} from '../Config';
-import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {saveUserDetailsAction} from '../redux/actions';
 
 class Login extends Component{
-    static navigationOptions = {
-        drawerLabel:()=>null
-    }
+   
     constructor(){
         super()
 
@@ -60,28 +56,14 @@ class Login extends Component{
     
 
     registerHandler = () =>{
-
-        if(!this.props.route){
-            this.props.navigation.navigate('Register');
-        }
-
-        else{
         
-            
-            this.props.route('Register');
-        }
+        this.props.navigation.navigate('Register');
     }
 
     gotoDashboard = () =>{
-        if(!this.props.route){
-            this.props.navigation.navigate('Dashboard');
-        }
-
-        else{
         
-            
-            this.props.route('Dashboard');
-        }
+        this.props.navigation.navigate('Dashboard');
+       
     }
 
     errorInConnection = () => {
@@ -233,13 +215,13 @@ class Login extends Component{
                                 <Form style={{marginTop:90}}>
                                 {this.state.email=='' ?
                                     
-                                    <Item floatingLabel>
+                                    <Item floatingLabel last>
                                         <Label>Email</Label>
                                         <Input onChangeText={(email) => this.setState({email})}/>
                                     </Item>
                                 :
 
-                                    <Item floatingLabel>
+                                    <Item floatingLabel last>
                                         <Label>Email</Label>
                                         <Input onChangeText={(email) => this.setState({email})} value={this.state.email}/>
                                     </Item>
@@ -257,19 +239,20 @@ class Login extends Component{
                                             <Text style={{width: '100%',textAlign: 'center',color:'#fff',fontSize:20}}>Login</Text>
                                         </Button>
                                     </View>
-                                    <View>
+
+                                    <View style={{marginTop:15,alignItems:'center'}}>
                                         <Row>
-                                            <Text style={{marginLeft:10, marginTop:10}}>You don't have an account?</Text>
+                                            <Text style={{marginLeft:10, marginTop:10,color:'black'}}>You don't have an account?</Text>
                                             <TouchableOpacity onPress={this.registerHandler} >
                                                 <Text style={{marginLeft:10, marginTop:10,color:'#e83e8c'}}>Register here</Text>
                                             </TouchableOpacity>
                                         </Row>
                                     </View>
+                                    
                                 </Form>
-                        
-                            
                             
                         </Content>
+                        
                     </Container>
                 </Root>
             

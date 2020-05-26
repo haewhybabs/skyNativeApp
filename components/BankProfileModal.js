@@ -20,7 +20,7 @@ import{
 } from 'native-base';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {materialIcons, MaterialIcons} from '@expo/vector-icons';
+import {materialIcons, MaterialIcons} from 'react-native-vector-icons';
 import FooterScreen from './Footer';
 import {apiUrl,token,vendorImage} from '../Config';
 
@@ -145,13 +145,11 @@ class BankProfileModal extends Component{
                     <Modal visible={this.props.bankOpen}>
 
                         <ScrollView>
-                            <View>                                        
-                                <MaterialIcons
-                                    name='close'
-                                    size={24}
-                                    style={styles.modalToggle}
-                                    onPress={()=>this.props.bankModal(false)}
-                                /> 
+                            <View>
+                            <TouchableOpacity onPress={()=>this.props.bankModal(false)} style={{alignItems:'center', marginTop:10,marginBottom:10}}>
+                                <Icon name="close" style={{color:'#e83e8c'}} />  
+                            </TouchableOpacity>                                    
+                               
                             </View>
                             <View style={{alignItems:'center'}}>
                                 <Text style={{fontWeight:'bold'}}>Bank Information Details</Text>
