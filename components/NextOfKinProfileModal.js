@@ -124,8 +124,6 @@ class NextOfKinProfileModal extends Component{
                 fullname:value.fullName,
                 address:value.address,
                 relationship:value.relationship,
-                state_id:value.stateId,
-                lg_id:value.lgId,
                 phone_number:value.phoneNumber
             })
 
@@ -138,8 +136,7 @@ class NextOfKinProfileModal extends Component{
         })
         .then((contents)=>{
             this.props.refresh();
-            this.props.hideLoader();    
-            console.log(contents);
+            this.props.hideLoader();   
             if(contents.status){
                 Toast.show({
                     text:'Success!!',
@@ -211,50 +208,7 @@ class NextOfKinProfileModal extends Component{
                                 </Item>
 
                                 
-                                <Item picker>
-                                    <Picker
-                                        mode="dropdown"
-                                        iosIcon={<Icon name="arrow-down" />}
-                                    
-                                        placeholderStyle={{ color: "#bfc6ea" }}
-                                        placeholderIconColor="#007aff"
-                                        selectedValue={this.state.stateId}
-                                        onValueChange={this.onValueStateChange.bind(this)}
-                                        >
-
-                                        <Picker.Item label = "Select State" value = "" />
-
-                                        {this.props.states.map((row, index) => (
-                                            <Picker.Item label={row.names} value={row.idstates} key={row.idstates} />
-                                        ))}          
-                                    </Picker>
-                                </Item>
-
-                                <Label style={{marginLeft:10}}>Select Local Government</Label>
-                                <Item picker>
-                                    <Picker
-                                        mode="dropdown"
-                                        iosIcon={<Icon name="arrow-down" />}
-                                    
-                                        placeholderStyle={{ color: "#bfc6ea" }}
-                                        placeholderIconColor="#007aff"
-                                        selectedValue={this.state.lgId}
-                                        onValueChange={this.onValueLgChange.bind(this)}
-                                        >
-
-                                        {this.state.lgId !='' ?
-                                            <Picker.Item label={this.state.lgName} value={this.state.lgId}/>
-
-                                            :null
-                                    
-                                        }
-                                        {this.state.selectedLgs.map((row, index) => (
-                                            <Picker.Item label={row.lgs} value={row.idlgs} key={row.idlgs} />
-                                        ))}       
-                                    </Picker>
-                                </Item>
-
-
+                            
                                 <Item floatingLabel last>
                                     <Label>Address</Label>
                                     <Input onChangeText={(address) => this.setState({address})} value={this.state.address}/>

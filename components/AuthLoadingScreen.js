@@ -28,6 +28,7 @@ class AuthLoadingScreen extends Component{
 
     _checkToken = async () =>
     {
+        console.log('user',this.props.user)
         
         if(this.props.user){
             this.props.navigation.navigate("App")

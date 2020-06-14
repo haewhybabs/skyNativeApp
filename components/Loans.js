@@ -65,9 +65,7 @@ class Loans extends Component{
         })
         
         .then((contents)=>{
-
-          
-
+           
             this.setState({
 
                 loanPlans:contents.loanPlans,

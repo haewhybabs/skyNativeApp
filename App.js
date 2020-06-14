@@ -8,6 +8,7 @@ import {
    import {Container} from 'native-base';
 import Route from './components/Route';
 import {Provider} from 'react-redux';
+import { Provider as PaperProvider } from 'react-native-paper';
 import {createStore, applyMiddleware} from 'redux';
 import reducers from './reducers';
 export default class App extends Component {
@@ -20,7 +21,9 @@ export default class App extends Component {
     return (
       <Container>
         <Provider store={store}>
-          <Route/>
+          <PaperProvider>
+            <Route/>
+          </PaperProvider>
         </Provider>
       </Container>
     );

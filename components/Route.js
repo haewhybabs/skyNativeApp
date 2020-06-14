@@ -17,6 +17,7 @@ import Loans from './Loans';
 import History from './History';
 import ContactUs from './ContactUs';
 import AuthLoadingScreen from './AuthLoadingScreen';
+import LoanAmount from './LoanAmount';
 
 import{
     
@@ -120,6 +121,23 @@ const AppScreens = {
         }),
     },
 
+    LoanAmount: {
+        screen: LoanAmount,
+        navigationOptions: () => ({
+            title: 'Loan Amount',
+            headerBackTitle: null,
+            headerStyle: {
+                backgroundColor: '#007bff',
+                
+            },
+            headerTitleStyle:{
+                color:'white'
+            },
+
+
+        }),
+    },
+
     ContactUs: {
         screen: ContactUs,
         navigationOptions: () => ({
@@ -137,6 +155,8 @@ const AppScreens = {
         }),
     },
 
+    
+
 
 
 }
@@ -145,7 +165,6 @@ const AuthScreens =
 {
     Splash: {
         screen: Splash,
-        header: null,
         navigationOptions:({navigation}) =>{
             return {
                 drawerLabel: ()=> null,
@@ -200,9 +219,15 @@ const AccountNavigator = createDrawerNavigator(AppScreens,{
     drawerToggleRoute:'DrawerToggle'
 });
 
-const AuthNavigator = createDrawerNavigator(AuthScreens,{
-    initialRouteName:'Dashboard',
-    headerMode:"none"
+const AuthNavigator = createStackNavigator(AuthScreens,{
+    initialRouteName:'Splash',
+    headerMode:"none",
+    navigationOptions:({navigation}) =>{
+        return {
+            drawerLabel: ()=> null,
+            drawerLockMode:'locked-closed'
+        }
+    }
 });
 
 const AppNavigator = createDrawerNavigator({

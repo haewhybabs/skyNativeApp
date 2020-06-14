@@ -153,8 +153,6 @@ class EmploymentProfileModal extends Component{
                 employer_address:value.employerAddress,
                 nature_of_job:value.natureOfJob,
                 salary_range_id:value.salaryRangeId,
-                employer_lg_id:value.employerLgId,
-                employer_state_id:value.employerStateId
             })
 
             
@@ -226,53 +224,7 @@ class EmploymentProfileModal extends Component{
                                     <Label>Employer Name</Label>
                                     <Input onChangeText={(employerName) => this.setState({employerName})} value={this.state.employerName}/>
                                 </Item>
-                                
-                                
-                                <Item picker>
-                                    <Picker
-                                        mode="dropdown"
-                                        iosIcon={<Icon name="arrow-down" />}
-                                    
-                                        placeholderStyle={{ color: "#bfc6ea" }}
-                                        placeholderIconColor="#007aff"
-                                        selectedValue={this.state.employerStateId}
-                                        onValueChange={this.onValueStateChange.bind(this)}
-                                        >
-                                        <Picker.Item label="Select Employer State"  value=""/>
-
-                                        {this.props.states.map((row, index) => (
-                                            <Picker.Item label={row.names} value={row.idstates} key={row.idstates} />
-                                        ))}          
-                                    </Picker>
-                                </Item>
-
-                                
-                                <Item picker>
-                                    <Label>Employer Local Government</Label>
-                                    <Picker
-                                        mode="dropdown"
-                                        iosIcon={<Icon name="arrow-down" />}
-                                    
-                                        placeholderStyle={{ color: "#bfc6ea" }}
-                                        placeholderIconColor="#007aff"
-                                        selectedValue={this.state.employerLgId}
-                                        onValueChange={this.onValueLgChange.bind(this)}
-                                        >
-
-                                        
-                                        {this.state.employerLgId !='' ?
-                                            <Picker.Item label={this.state.employerLgName} value={this.state.employerLgId}/>
-
-                                            :null
-                                    
-                                        }
-                                        {this.state.selectedLgs.map((row, index) => (
-                                            <Picker.Item label={row.lgs} value={row.idlgs} key={row.idlgs} />
-                                        ))}       
-                                    </Picker>
-                                </Item>
-
-
+                            
                                 <Item floatingLabel last>
                                     <Label>Employer Address</Label>
                                     <Input onChangeText={(employerAddress) => this.setState({employerAddress})} value={this.state.employerAddress}/>

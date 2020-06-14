@@ -133,6 +133,11 @@ class History extends Component{
                                 <Text>{pendingLoans[i].loan_start_date}</Text>
                             </Right>
                         </CardItem>
+
+                        <CardItem>
+                           
+                            <Text style={{fontWeight:'bold'}}>Approved Amount</Text><Text style={{fontWeight:'bold'}}>(₦{moneyFormatter(parseInt(pendingLoans[i].approvedAmount))})</Text>    
+                        </CardItem>
                         <CardItem>
                             <Text>Loan Information: {pendingLoans[i].loan_info}</Text>
                         </CardItem>   
@@ -197,7 +202,7 @@ class History extends Component{
                     <Card>
                         <CardItem>
                             <Left>
-                                <Text style={{fontWeight:'bold'}}>{maturedLoans[i].name}</Text><Text style={{fontWeight:'bold'}}>(₦{moneyFormatter(parseInt(maturedLoans[i].amount))})</Text>
+                                <Text style={{fontWeight:'bold'}}>{maturedLoans[i].name}</Text><Text style={{fontWeight:'bold'}}>(₦{moneyFormatter(parseInt(maturedLoans[i].approvedAmount))})</Text>
                             </Left>      
                             <Right>
                                 <Text>{maturedLoans[i].loan_start_date}</Text>
@@ -230,7 +235,7 @@ class History extends Component{
                 <Card>
                     <CardItem>
                         <Left>
-                            <Text style={{fontWeight:'bold'}}>{activeLoan.name}</Text><Text style={{fontWeight:'bold'}}>(₦{moneyFormatter(parseInt(activeLoan.amount))})</Text>
+                            <Text style={{fontWeight:'bold'}}>{activeLoan.name}</Text><Text style={{fontWeight:'bold'}}>(₦{moneyFormatter(parseInt(activeLoan.approvedAmount))})</Text>
                         </Left>
 
                         
@@ -331,14 +336,9 @@ class History extends Component{
                 <HeaderScreen navigation={this.props.navigation} title={this.state.title}/>
                 
                 <Content>
-                    <View style={{marginTop:20,marginLeft:3,marginRight:3}}>
-                        <Text style={{fontWeight:'bold',fontSize:18}}>Loan History</Text>
-                        <Text style={{marginTop:5,lineHeight:23}}>We designed our loan process to fit your needs and help you grow. We support Small and Medium Scale Enterprises (SMEs) operators in Nigeria. Irrespective of the sector
-                        your enterprise is operating at an affordable interest rate.
-                        </Text>
-                       
+                    <View style={{marginLeft:3,marginRight:3,marginTop:20}}>
                         
-                        <View style={{marginTop:10}}>
+                        <View>
                             <Tabs tabBarBackgroundColor='#fff'>
                                 
                                 <Tab heading="Pending">
