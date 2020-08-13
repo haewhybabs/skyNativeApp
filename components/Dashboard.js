@@ -37,6 +37,7 @@ class Dashboard extends Component{
            
           
         }
+        this.componentDidMount
         
         
        

@@ -31,13 +31,14 @@ class Loans extends Component{
         this.state = {
            
            loanPlans:[],
-
+           loanReasons:[],
            loanDuration:[],
            loanPlanInput:'',
            loanRequestInfo:'',
            loanAmount:'',
            loanRequestInfoError:'',
            loanAmountError:'',
+           reasonChosen:'',
 
            isLoading:true,
            title:'Loan Request'
@@ -70,6 +71,7 @@ class Loans extends Component{
 
                 loanPlans:contents.loanPlans,
                 loanDuration:contents.loanDuration,
+                loanReasons:contents.loanReasons,
                 isLoading:false
 
             });
@@ -95,6 +97,12 @@ class Loans extends Component{
     onValueChange2(value) {
         this.setState({
           loanPlanInput: value
+        });
+    }
+
+    onChangeReasonChosen(value) {
+        this.setState({
+          reasonChosen: value
         });
     }
 
@@ -167,13 +175,13 @@ class Loans extends Component{
         let loanAmount = state.loanAmount;
         let amountValidation = this.loanAmountValidation(loanAmount);
         let loanRequestInfoError=""
-        if(state.loanRequestInfo == ""){
+        if(state.reasonChosen == ""){
             loanRequestInfoError="You haven't filled this field.";
         }
         this.setState({
             loanRequestInfoError
         })
-        if(amountValidation.status==false || state.loanAmountError!="" || state.loanRequestInfo ==""){
+        if(amountValidation.status==false || state.loanAmountError!="" || state.reasonChosen ==""){
             Toast.show({
                 text:'Ops!! All the fields are required',
                 buttonText:'Okay',
@@ -196,7 +204,7 @@ class Loans extends Component{
                 body: JSON.stringify({
                     amount:state.loanAmount,
                     loan_range_id:state.loanPlanInput,
-                    loan_info:state.loanRequestInfo
+                    loan_reason:state.reasonChosen
                 })
                 
             })
@@ -297,9 +305,22 @@ class Loans extends Component{
                                     <Input disabled value={JSON.stringify(this.state.loanDuration.duration)}/>
                                 </Item>
 
-                                <Item floatingLabel last>
-                                    <Label>Can we know why you need the loan </Label>
-                                    <Input onChangeText={(loanRequestInfo) => this.setState({loanRequestInfo})}/>
+                                <Item picker>
+                                    <Picker
+                                        mode="dropdown"
+                                        iosIcon={<Icon name="arrow-down" />}
+                                        
+                                        placeholder="Select Loan Plan"
+                                        placeholderStyle={{ color: "#bfc6ea" }}
+                                        placeholderIconColor="#007aff"
+                                        selectedValue={this.state.reasonChosen}
+                                        onValueChange={this.onChangeReasonChosen.bind(this)}
+                                        >
+                                        <Picker.Item label="Select Loan Purpose" value="" />
+                                        {this.state.loanReasons.map((row,index)=>(
+                                            <Picker.Item label={row.reason} value={row.idloanreasons} key={row.idloanreasons} />
+                                        ))}
+                                    </Picker>
                                 </Item>
                                 <Text style={{color:'red'}}>{this.state.loanRequestInfoError}</Text>
 

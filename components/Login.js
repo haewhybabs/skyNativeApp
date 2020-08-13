@@ -126,6 +126,7 @@ class Login extends Component{
                             email:contents.email,
                             user_id:contents.idusers,
                             role_id:contents.role_id,
+                            mobile:contents.phone_number
                         }));
 
                         this.props.saveUserDetailsAction({

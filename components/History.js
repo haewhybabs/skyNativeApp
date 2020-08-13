@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import PaystackWebView from 'react-native-paystack-webview';
 import { 
   StyleSheet,
   View,
@@ -20,7 +21,7 @@ import{
 import {materialIcons, MaterialIcons} from 'react-native-vector-icons';
 import FooterScreen from './Footer';
 import HeaderScreen from './Header';
-import {apiUrl,token,vendorImage} from '../Config';
+import {apiUrl,token,paystackPublicKey,paystackSecretKey} from '../Config';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -38,13 +39,35 @@ class History extends Component{
            rejectedLoans:[],
            overdueLoan:[],
            maturedLoans:[],
-           title:'Loan History'
+           title:'Loan History',
+           user:[]
            
 
           
         }
+        this.getUserDetails()
        
     }
+
+    async getUserDetails()
+    {
+        let userDetails = await AsyncStorage.getItem('userDetails');
+        let userStore = JSON.parse(userDetails);
+        console.log(userStore);
+        this.setState({
+            user:userStore
+        });
+    }
+
+    showLoader = () => {
+        this.setState({isLoading:true})
+    }
+
+    hideLoader = () =>{
+        this.setState({isLoading:false})
+        
+    }
+
 
     componentDidMount(){
         const user = this.props.user; 
@@ -97,10 +120,82 @@ class History extends Component{
             
         })
     }
+    random=(length) =>{
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+           result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+
+    successTransaction=(data)=>{
+        this.showLoader();
+        const user = this.props.user; 
+        const reference=data.trxref;
+        const loanId=this.state.activePaymentDetails.loanDetails.idloans;
+        const amount = this.state.activePaymentDetails.loanToPay;
+        console.log('success',reference,loanId,amount)
+
+        
+
+
+        fetch(apiUrl+'success-transaction',{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'token':token,
+                'Authorization':'Bearer '+user.token
+            },
+            body: JSON.stringify({
+                amount,reference,loanId
+            })
+            
+        })
+        .then(response => {
+                                
+            return response.json();      
+        })
+        
+        .then((contents)=>{
+            this.hideLoader();
+
+        if(contents.status){
+            Toast.show({
+                text:'Success!! Payment Successful!!!',
+                buttonText:'Okay',
+                style:{backgroundColor:'green'},
+                duration:3000       
+            })
+            this.componentDidMount()
+            
+        }
+        else{
+            Toast.show({
+                text:'Error!! '+contents.message,
+                buttonText:'Okay',
+                style:{backgroundColor:'red'},
+                duration:4000       
+            })
+        }
+
+            
+        })
+        .catch((error)=>{
+            
+            this.errorInConnection();
+        })
+
+
+
+    }
+
 
    
 
     render(){
+        let paystackPayment=[];
         let pendingLoans = this.state.pendingLoans; 
         let activeLoan = this.state.activeLoan;
         let activeDisplay = [];
@@ -111,10 +206,47 @@ class History extends Component{
         let rejectedDisplay = [];
         let overdueLoan =this.state.overdueLoan;
         let overdueDisplay = [];
+        let amountToPay=0;
+        if(this.state.activePaymentDetails){
+            amountToPay = this.state.activePaymentDetails.loanToPay;
+        }
+        
+        
+      
+       
 
         const moneyFormatter = (money) =>{
             return (money).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
         }
+
+        
+
+
+        paystackPayment.push(
+            
+            <PaystackWebView
+                buttonText="Pay Now"
+                showPayButton={true}
+                paystackKey={paystackPublicKey}
+                paystackSecretKey={paystackSecretKey}
+                amount={amountToPay}
+                billingEmail={this.state.user.email}
+                billingName={this.state.user.fullname}
+                ActivityIndicatorColor="green"
+                SafeAreaViewContainer={{marginTop: 5}}
+                SafeAreaViewContainerModal={{marginTop: 5}}
+                refNumber={this.random(12)}
+                onCancel={(e) => {
+                    this.props.navigation.goBack();
+                    // handle response here
+                }}
+                onSuccess={(e) => {
+                    this.successTransaction(e.data)
+                }}
+                autoStart={false}
+            />
+            
+        )
 
         
 
@@ -238,8 +370,7 @@ class History extends Component{
                             <Text style={{fontWeight:'bold'}}>{activeLoan.name}</Text><Text style={{fontWeight:'bold'}}>(₦{moneyFormatter(parseInt(activeLoan.approvedAmount))})</Text>
                         </Left>
 
-                        
-                        
+                                     
                         <Right>
                             <Text>{activeLoan.loan_start_date} to</Text><Text style={{fontWeight:'bold'}}>{this.state.endDate}</Text>
                         </Right>
@@ -250,9 +381,7 @@ class History extends Component{
                         </Left>
                         
                         <Right>
-                            <Button rounded style={{backgroundColor:'#e83e8c',width:60,height:30}}>
-                                <Text style={{color:'#fff',width:'100%',textAlign:'center'}}>Pay</Text>
-                            </Button>
+                            {paystackPayment}
                         </Right>
                     </CardItem>
 
@@ -297,9 +426,12 @@ class History extends Component{
                             </Left>
                             
                             <Right>
-                                <Button rounded style={{backgroundColor:'#e83e8c',width:60,height:30}}>
+                                {/*<Button rounded style={{backgroundColor:'#e83e8c',width:60,height:30}}>
                                     <Text style={{color:'#fff',width:'100%',textAlign:'center'}}>Pay</Text>
-                                </Button>
+                                </Button>*/}
+                               
+                                {paystackPayment}
+                             
                             </Right>
                         </CardItem>
 
@@ -331,51 +463,55 @@ class History extends Component{
                 <ActivityIndicator size="large" color="#00CCFF" animating  />
             </View>
             :
+
+            <Root>
         
-            <Container>
-                <HeaderScreen navigation={this.props.navigation} title={this.state.title}/>
-                
-                <Content>
-                    <View style={{marginLeft:3,marginRight:3,marginTop:20}}>
-                        
-                        <View>
-                            <Tabs tabBarBackgroundColor='#fff'>
-                                
-                                <Tab heading="Pending">
-                                    {pendingDisplay}
-                                </Tab>
-                                
-                                 
-                                <Tab heading="Active">
-                                    {activeDisplay}
-
-                                </Tab>
-                                
-
-                                <Tab heading="Overdue"> 
-                               
-                                    {overdueDisplay}   
-                                
-                                </Tab>
-                                <Tab heading="Rejected">
-                                    {rejectedDisplay}
-                                </Tab>
-
-                                <Tab heading="Matured">
-                                    {maturedDisplay}
-                                </Tab>
-                            </Tabs>
-                            
-                        </View>
-                       
-                        
-                            
-                            
-                    </View>
+                <Container>
+                    <HeaderScreen navigation={this.props.navigation} title={this.state.title}/>
                     
-                </Content>
-                <FooterScreen navigation={this.props.navigation}/>
-            </Container>
+                    <Content>
+                        <View style={{marginLeft:3,marginRight:3,marginTop:20}}>
+                            
+                            <View>
+                                <Tabs tabBarBackgroundColor='#fff'>
+                                    
+                                    <Tab heading="Pending">
+                                        {pendingDisplay}
+                                    </Tab>
+                                    
+                                    
+                                    <Tab heading="Active">
+                                        {activeDisplay}
+
+                                    </Tab>
+                                    
+
+                                    <Tab heading="Overdue"> 
+                                
+                                        {overdueDisplay}   
+                                    
+                                    </Tab>
+                                    <Tab heading="Rejected">
+                                        {rejectedDisplay}
+                                    </Tab>
+
+                                    <Tab heading="Matured">
+                                        {maturedDisplay}
+                                    </Tab>
+                                </Tabs>
+                                
+                            </View>
+                        
+                            
+                                
+                                
+                        </View>
+                        
+                    </Content>
+                    <FooterScreen navigation={this.props.navigation}/>
+                </Container>
+            </Root>
+
         )
 
     }

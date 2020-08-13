@@ -299,7 +299,6 @@ class ProfileModal extends Component{
                                     </Text>
                                 
 
-                                <Label style={{marginTop:20,marginLeft:10}}>Select Sex</Label>
                                 <Item picker>
                                     <Picker
                                         mode="dropdown"
@@ -377,9 +376,7 @@ class ProfileModal extends Component{
 
                                             :null
                                     
-                                        }
-
-                                        
+                                        }                                     
 
                                         {this.state.selectedLgs.map((row, index) => (
                                             <Picker.Item label={row.lgs} value={row.idlgs} key={row.idlgs} />

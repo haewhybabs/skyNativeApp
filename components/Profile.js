@@ -180,7 +180,7 @@ class Profile extends Component{
         this.componentDidMount();
     }
 
-    selectPhoto = async() =>
+    selectPhoto =() =>
     {
         ImagePicker.showImagePicker({noData:true,mediaType:'photo'}, (response) => {
             if (response.didCancel) {
