@@ -1,7 +1,7 @@
 const token = "H3adfadpf4adf";
-// const apiUrl = "https://skyloan.today/mobile/api/"
+const apiUrl = "https://skyloan.today/mobile/api/"
 // PBVZrrGWdH2W;
-const apiUrl = "http://192.168.43.36:8000/api/";
+//const apiUrl = "http://192.168.43.36:8000/api/";
 
 //Test
 const paystackSecretKey = 'sk_test_76e2603efe40cc52e2e676a4ffe60beb3656724d';

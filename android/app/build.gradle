@@ -162,6 +162,10 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+        stagingrelease {
+            initWith release
+            matchingFallbacks = ['debug', 'release'] // Addded this
+        }
     }
 
     packagingOptions {

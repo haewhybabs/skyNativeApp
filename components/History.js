@@ -208,8 +208,9 @@ class History extends Component{
         let overdueDisplay = [];
         let amountToPay=0;
         if(this.state.activePaymentDetails){
-            amountToPay = this.state.activePaymentDetails.loanToPay;
+            amountToPay = Math.ceil(this.state.activePaymentDetails.loanToPay);
         }
+        
         
         
       
